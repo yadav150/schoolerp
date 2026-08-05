@@ -1,219 +1,370 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - EduERP</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/dashboard.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hawaipur HSS · Dashboard</title>
+
+    <!-- ===== Universal Styles ===== -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- ===== Page‑Specific Styles ===== -->
+    <link rel="stylesheet" href="css/dashboard.css" />
+
+    <!-- ===== Font Awesome (icons) ===== -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 </head>
 <body>
-    <!-- Off‑canvas Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-brand">
-            <div class="sidebar-logo">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                    <path d="M6 12v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"/>
-                </svg>
-            </div>
-            <div class="sidebar-title">
-                <h2>EduERP</h2>
-                <span>School Management</span>
-            </div>
-        </div>
-        <nav class="sidebar-nav">
-            <a href="index.html" class="nav-item active">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
-                    <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
-                </svg>
-                <span>Dashboard</span>
-            </a>
-            <a href="pages/student-management.html" class="nav-item">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                </svg>
-                <span>Students</span>
-            </a>
-            <a href="pages/teacher-management.html" class="nav-item">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                </svg>
-                <span>Teachers</span>
-            </a>
-            <a href="pages/fee-management.html" class="nav-item">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                </svg>
-                <span>Fee Management</span>
-            </a>
-            <a href="pages/salary-management.html" class="nav-item">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-                    <circle cx="12" cy="14" r="2"/>
-                </svg>
-                <span>Salary</span>
-            </a>
-        </nav>
-        <div class="sidebar-footer">
-            <span class="version-badge">v1.0.0</span>
-        </div>
-    </aside>
 
-    <!-- Mobile header with hamburger -->
-    <header class="mobile-header" id="mobileHeader">
-        <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-            </svg>
-        </button>
-        <span class="mobile-brand">EduERP</span>
-    </header>
+    <!-- ============================================================
+    WRAPPER
+    ============================================================ -->
+    <div class="app-wrapper">
 
-    <!-- Overlay for mobile sidebar -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-brand">
+                <i class="fas fa-school sidebar-brand-icon"></i>
+                <span class="sidebar-brand-text">Hawaipur HSS</span>
+            </div>
 
-    <!-- Main Content -->
-    <main class="main-content" id="mainContent">
-        <div class="page-header">
-            <div>
-                <h1 class="page-title">Dashboard</h1>
-                <p class="page-subtitle">Welcome back! Here's your school overview.</p>
-            </div>
-            <div class="header-date" id="headerDate"></div>
-        </div>
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
 
-        <!-- Statistics Cards -->
-        <section class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon stat-icon-blue">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                    </svg>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-label">Total Students</span>
-                    <span class="stat-value" id="totalStudents">0</span>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon stat-icon-green">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                    </svg>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-label">Total Teachers</span>
-                    <span class="stat-value" id="totalTeachers">0</span>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon stat-icon-purple">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                    </svg>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-label">Fee Collected (Month)</span>
-                    <span class="stat-value" id="feeCollected">₹0</span>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon stat-icon-orange">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-                        <circle cx="12" cy="14" r="2"/>
-                    </svg>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-label">Salary Paid (Month)</span>
-                    <span class="stat-value" id="salaryPaid">₹0</span>
-                </div>
-            </div>
-        </section>
+                    <!-- Dashboard -->
+                    <li class="nav-item active">
+                        <a href="index.html" class="nav-link">
+                            <i class="fas fa-th-large nav-icon"></i>
+                            <span class="nav-label">Dashboard</span>
+                        </a>
+                    </li>
 
-        <!-- Recent Activity & Quick Actions -->
-        <section class="dashboard-grid">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Recent Students</h3>
-                    <a href="pages/student-management.html" class="link-btn">View All</a>
-                </div>
-                <div class="card-body" id="recentStudents">
-                    <p class="empty-state">No students enrolled yet.</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <h3>Recent Fee Payments</h3>
-                    <a href="pages/fee-management.html" class="link-btn">View All</a>
-                </div>
-                <div class="card-body" id="recentPayments">
-                    <p class="empty-state">No payments recorded yet.</p>
-                </div>
-            </div>
-            <div class="card quick-actions-card">
-                <div class="card-header">
-                    <h3>Quick Actions</h3>
-                </div>
-                <div class="card-body quick-actions">
-                    <a href="pages/student-management.html" class="action-btn action-btn-blue">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-                            <line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/>
-                        </svg>
-                        Add Student
-                    </a>
-                    <a href="pages/teacher-management.html" class="action-btn action-btn-green">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-                            <line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/>
-                        </svg>
-                        Add Teacher
-                    </a>
-                    <a href="pages/fee-management.html" class="action-btn action-btn-purple">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                        </svg>
-                        Collect Fee
-                    </a>
-                    <a href="pages/salary-management.html" class="action-btn action-btn-orange">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-                        </svg>
-                        Pay Salary
-                    </a>
-                </div>
-            </div>
-        </section>
-    </main>
+                    <!-- Students -->
+                    <li class="nav-item">
+                        <a href="students.html" class="nav-link">
+                            <i class="fas fa-user-graduate nav-icon"></i>
+                            <span class="nav-label">Students</span>
+                        </a>
+                    </li>
 
-    <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
+                    <!-- Teachers -->
+                    <li class="nav-item">
+                        <a href="teachers.html" class="nav-link">
+                            <i class="fas fa-chalkboard-teacher nav-icon"></i>
+                            <span class="nav-label">Teachers</span>
+                        </a>
+                    </li>
 
-    <!-- Global Confirm Modal -->
-    <div class="modal-overlay" id="confirmModal">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-header">
-                <h3 id="confirmTitle">Are you sure?</h3>
+                    <!-- Admission -->
+                    <li class="nav-item">
+                        <a href="admission.html" class="nav-link">
+                            <i class="fas fa-user-plus nav-icon"></i>
+                            <span class="nav-label">Admission</span>
+                        </a>
+                    </li>
+
+                    <!-- Salary -->
+                    <li class="nav-item">
+                        <a href="salary.html" class="nav-link">
+                            <i class="fas fa-wallet nav-icon"></i>
+                            <span class="nav-label">Salary</span>
+                        </a>
+                    </li>
+
+                    <!-- Fee -->
+                    <li class="nav-item">
+                        <a href="fee.html" class="nav-link">
+                            <i class="fas fa-coins nav-icon"></i>
+                            <span class="nav-label">Fee</span>
+                        </a>
+                    </li>
+
+                    <!-- Receipts -->
+                    <li class="nav-item">
+                        <a href="receipts.html" class="nav-link">
+                            <i class="fas fa-receipt nav-icon"></i>
+                            <span class="nav-label">Receipts</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=1a237e&color=fff&size=40" alt="Admin avatar" class="sidebar-avatar" />
+                    <div class="sidebar-user-info">
+                        <span class="sidebar-user-name">Administrator</span>
+                        <span class="sidebar-user-role">School Admin</span>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-                <p id="confirmMessage">This action cannot be undone.</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="confirmCancel">Cancel</button>
-                <button class="btn btn-danger" id="confirmOk">Confirm</button>
-            </div>
-        </div>
+        </aside>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <main class="main-content" id="mainContent">
+
+            <!-- ===== HEADER ===== -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="Toggle sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="header-search">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" placeholder="Search..." aria-label="Search" />
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <button class="header-btn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                    <button class="header-btn" aria-label="Messages">
+                        <i class="fas fa-envelope"></i>
+                        <span class="badge">5</span>
+                    </button>
+                    <div class="header-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=1a237e&color=fff&size=36" alt="Profile" class="profile-avatar" />
+                        <span class="profile-name">Admin</span>
+                        <i class="fas fa-chevron-down profile-chevron"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ===== PAGE CONTENT ===== -->
+            <section class="page-content">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Dashboard</h1>
+                        <p class="page-subtitle">Welcome back, Administrator. Here's what's happening at Hawaipur HSS.</p>
+                    </div>
+                    <div class="page-actions">
+                        <button class="btn btn-outline">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i> New Entry
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ===== STATS CARDS ===== -->
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-card-icon blue">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="stat-card-content">
+                            <span class="stat-label">Total Students</span>
+                            <span class="stat-value" id="totalStudents">1,284</span>
+                            <span class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 12.5%
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-icon green">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="stat-card-content">
+                            <span class="stat-label">Total Teachers</span>
+                            <span class="stat-value" id="totalTeachers">48</span>
+                            <span class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 4.2%
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-icon orange">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="stat-card-content">
+                            <span class="stat-label">Monthly Revenue</span>
+                            <span class="stat-value" id="monthlyRevenue">₹4,82,000</span>
+                            <span class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 8.7%
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-icon red">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="stat-card-content">
+                            <span class="stat-label">Monthly Expenses</span>
+                            <span class="stat-value" id="monthlyExpenses">₹2,15,000</span>
+                            <span class="stat-change negative">
+                                <i class="fas fa-arrow-down"></i> 3.1%
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ===== ROW: CHART + RECENT ===== -->
+                <div class="dashboard-row">
+
+                    <!-- Chart Card -->
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Attendance Overview</h3>
+                            <span class="card-subtitle">This week</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <!-- Pure CSS bar chart -->
+                                <div class="bar-chart">
+                                    <div class="bar-group">
+                                        <div class="bar" style="height:75%;">
+                                            <span class="bar-label">Mon</span>
+                                            <span class="bar-value">75%</span>
+                                        </div>
+                                    </div>
+                                    <div class="bar-group">
+                                        <div class="bar" style="height:82%;">
+                                            <span class="bar-label">Tue</span>
+                                            <span class="bar-value">82%</span>
+                                        </div>
+                                    </div>
+                                    <div class="bar-group">
+                                        <div class="bar" style="height:68%;">
+                                            <span class="bar-label">Wed</span>
+                                            <span class="bar-value">68%</span>
+                                        </div>
+                                    </div>
+                                    <div class="bar-group">
+                                        <div class="bar" style="height:90%;">
+                                            <span class="bar-label">Thu</span>
+                                            <span class="bar-value">90%</span>
+                                        </div>
+                                    </div>
+                                    <div class="bar-group">
+                                        <div class="bar" style="height:78%;">
+                                            <span class="bar-label">Fri</span>
+                                            <span class="bar-value">78%</span>
+                                        </div>
+                                    </div>
+                                    <div class="bar-group">
+                                        <div class="bar" style="height:85%;">
+                                            <span class="bar-label">Sat</span>
+                                            <span class="bar-value">85%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="card recent-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Recent Activity</h3>
+                            <a href="#" class="card-link">View All</a>
+                        </div>
+                        <div class="card-body">
+                            <ul class="activity-list">
+                                <li class="activity-item">
+                                    <div class="activity-icon blue">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p class="activity-text">
+                                            <strong>Rahul Sharma</strong> was admitted to Class 10
+                                        </p>
+                                        <span class="activity-time">2 min ago</span>
+                                    </div>
+                                </li>
+                                <li class="activity-item">
+                                    <div class="activity-icon green">
+                                        <i class="fas fa-coins"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p class="activity-text">
+                                            Fee payment of <strong>₹5,200</strong> received from <strong>Priya Patel</strong>
+                                        </p>
+                                        <span class="activity-time">15 min ago</span>
+                                    </div>
+                                </li>
+                                <li class="activity-item">
+                                    <div class="activity-icon orange">
+                                        <i class="fas fa-user-edit"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p class="activity-text">
+                                            <strong>Amit Kumar</strong> updated his profile information
+                                        </p>
+                                        <span class="activity-time">1 hour ago</span>
+                                    </div>
+                                </li>
+                                <li class="activity-item">
+                                    <div class="activity-icon red">
+                                        <i class="fas fa-wallet"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p class="activity-text">
+                                            Salary processed for <strong>12 teachers</strong> for June
+                                        </p>
+                                        <span class="activity-time">3 hours ago</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ===== QUICK ACTIONS ===== -->
+                <div class="quick-actions">
+                    <h3 class="quick-actions-title">Quick Actions</h3>
+                    <div class="quick-actions-grid">
+                        <a href="admission.html" class="quick-action-btn">
+                            <i class="fas fa-user-plus"></i>
+                            <span>New Admission</span>
+                        </a>
+                        <a href="fee.html" class="quick-action-btn">
+                            <i class="fas fa-coins"></i>
+                            <span>Collect Fee</span>
+                        </a>
+                        <a href="teachers.html" class="quick-action-btn">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>Add Teacher</span>
+                        </a>
+                        <a href="receipts.html" class="quick-action-btn">
+                            <i class="fas fa-receipt"></i>
+                            <span>Generate Receipt</span>
+                        </a>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ===== FOOTER ===== -->
+            <footer class="app-footer">
+                <p>&copy; 2026 <strong>Hawaipur Higher Secondary School</strong> &middot; Hawaipur, West Karbi Anglong, Assam</p>
+                <p class="footer-version">v2.0 &middot; ERP System</p>
+            </footer>
+
+        </main>
+
     </div>
 
-    <script src="js/script.js"></script>
+    <!-- ============================================================
+    SCRIPTS
+    ============================================================ -->
+
+    <!-- ===== Universal JavaScript ===== -->
+    <script src="js/app.js"></script>
+
+    <!-- ===== Page‑Specific JavaScript ===== -->
     <script src="js/dashboard.js"></script>
+
 </body>
 </html>
