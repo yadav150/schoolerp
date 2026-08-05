@@ -20,7 +20,7 @@
 </head>
 <body>
 
-    <!-- ===== SIDEBAR (same as before) ===== -->
+    <!-- ===== SIDEBAR ===== -->
     <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main Navigation">
         <div class="sidebar-brand">
             <div class="brand-icon">
@@ -94,7 +94,6 @@
 
         <!-- Page Content -->
         <main class="page-content">
-            <!-- Page Header -->
             <div class="page-header">
                 <h1 class="page-title">Student Admission</h1>
                 <div class="page-actions">
@@ -105,22 +104,14 @@
                 </div>
             </div>
 
-            <!-- Filters & Search (unchanged) -->
             <div class="admission-filters">
                 <div class="filter-group">
                     <select class="form-control form-control-sm" id="filterClass">
                         <option value="">All Classes</option>
-                        <option>Nursery</option>
-                        <option>LKG</option>
-                        <option>UKG</option>
-                        <option>Class 1</option>
-                        <option>Class 2</option>
-                        <option>Class 3</option>
-                        <option>Class 4</option>
-                        <option>Class 5</option>
-                        <option>Class 6</option>
-                        <option>Class 7</option>
-                        <option>Class 8</option>
+                        <option>Nursery</option><option>LKG</option><option>UKG</option>
+                        <option>Class 1</option><option>Class 2</option><option>Class 3</option>
+                        <option>Class 4</option><option>Class 5</option><option>Class 6</option>
+                        <option>Class 7</option><option>Class 8</option>
                     </select>
                     <select class="form-control form-control-sm" id="filterStatus">
                         <option value="">All Status</option>
@@ -134,7 +125,6 @@
                 </div>
             </div>
 
-            <!-- Admissions Table (unchanged) -->
             <div class="card">
                 <div class="card-body p-0">
                     <table class="table admission-table" id="admissionTable">
@@ -149,9 +139,7 @@
                             </tr>
                         </thead>
                         <tbody id="admissionTableBody">
-                            <tr>
-                                <td colspan="6" class="text-center">Loading admissions...</td>
-                            </tr>
+                            <tr><td colspan="6" class="text-center">Loading admissions...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -166,16 +154,13 @@
             </div>
         </main>
 
-        <!-- Footer -->
         <footer class="main-footer">
             <span>&copy; 2026 SchoolERP. All rights reserved.</span>
             <span>Version 1.0.0</span>
         </footer>
     </div>
 
-    <!-- ============================================ -->
-    <!-- ADMISSION MODAL – Multi-Step Wizard            -->
-    <!-- ============================================ -->
+    <!-- ===== ADMISSION MODAL – Multi-Step Wizard ===== -->
     <div class="modal-overlay" id="admissionModal">
         <div class="modal" style="max-width:700px;">
             <div class="modal-header">
@@ -219,17 +204,10 @@
                                 <label class="form-label" for="studentClass">Class <span class="required">*</span></label>
                                 <select id="studentClass" class="form-control" required>
                                     <option value="">Select Class</option>
-                                    <option>Nursery</option>
-                                    <option>LKG</option>
-                                    <option>UKG</option>
-                                    <option>Class 1</option>
-                                    <option>Class 2</option>
-                                    <option>Class 3</option>
-                                    <option>Class 4</option>
-                                    <option>Class 5</option>
-                                    <option>Class 6</option>
-                                    <option>Class 7</option>
-                                    <option>Class 8</option>
+                                    <option>Nursery</option><option>LKG</option><option>UKG</option>
+                                    <option>Class 1</option><option>Class 2</option><option>Class 3</option>
+                                    <option>Class 4</option><option>Class 5</option><option>Class 6</option>
+                                    <option>Class 7</option><option>Class 8</option>
                                 </select>
                             </div>
                         </div>
@@ -238,10 +216,7 @@
                                 <label class="form-label" for="studentSection">Section</label>
                                 <select id="studentSection" class="form-control">
                                     <option value="">Select Section</option>
-                                    <option>A</option>
-                                    <option>B</option>
-                                    <option>C</option>
-                                    <option>NA</option>
+                                    <option>A</option><option>B</option><option>C</option><option>NA</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -253,9 +228,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="studentGender">Gender</label>
                                 <select id="studentGender" class="form-control">
-                                    <option>Male</option>
-                                    <option>Female</option>
-                                    <option>Other</option>
+                                    <option>Male</option><option>Female</option><option>Other</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -365,12 +338,12 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">APAR ID (if available)</label>
+                            <label class="form-label" for="aparId">APAR ID (if available)</label>
                             <input type="text" id="aparId" class="form-control" placeholder="Enter APAR ID" />
                         </div>
                     </div>
 
-                    <!-- Step 4: Payment Confirmation & Final Submit -->
+                    <!-- Step 4: Confirmation -->
                     <div class="wizard-step" data-step="4">
                         <h4 class="wizard-step-title">Payment & Confirmation</h4>
                         <p class="wizard-step-desc">Review the details and submit the admission.</p>
@@ -398,7 +371,7 @@
 
                     <!-- Wizard Navigation -->
                     <div class="wizard-nav">
-                        <button type="button" class="btn" id="prevStepBtn" disabled>Previous</button>
+                        <button type="button" class="btn" id="prevStepBtn" style="display:none;">Previous</button>
                         <span style="font-size:14px; color:var(--gray-500);" id="stepCounter">Step 1 of 4</span>
                         <button type="button" class="btn btn-primary" id="nextStepBtn">Next</button>
                         <button type="submit" class="btn btn-success" id="submitAdmissionBtn" style="display:none;">
@@ -411,9 +384,7 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- PRINTABLE ADMISSION FORM (hidden until print) -->
-    <!-- ============================================ -->
+    <!-- ===== PRINTABLE ADMISSION FORM ===== -->
     <div class="print-admission-form" id="printAdmissionForm">
         <div class="form-header">
             <div class="school-name">SchoolERP International</div>
@@ -446,7 +417,7 @@
         </div>
     </div>
 
-    <!-- ===== CONFIRMATION DIALOG (unchanged) ===== -->
+    <!-- ===== CONFIRMATION DIALOG ===== -->
     <div class="modal-overlay" id="confirmModal">
         <div class="modal" style="max-width:400px;">
             <div class="modal-header">
@@ -465,610 +436,7 @@
 
     <!-- ===== SCRIPTS ===== -->
     <script src="../../assets/js/script.js"></script>
-    <script type="module">
-        import {
-            auth, database, storage,
-            onAuthStateChanged, signOut,
-            ref, push, set, onValue, remove, update,
-            storageRef, uploadBytes, getDownloadURL
-        } from '../../assets/js/firebase.js';
-
-        // ---------- Authentication ----------
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                window.location.href = '../../login.html';
-                return;
-            }
-            loadAdmissions();
-        });
-
-        document.getElementById('logoutBtn')?.addEventListener('click', async () => {
-            try {
-                await signOut(auth);
-                window.location.href = '../../login.html';
-            } catch (error) {
-                showToast('Logout failed: ' + error.message, 'error');
-            }
-        });
-
-        // ---------- Global Variables ----------
-        let allAdmissions = [];
-        let filteredAdmissions = [];
-        let currentPage = 1;
-        const pageSize = 5;
-        let deleteTargetId = null;
-
-        // File upload state
-        const uploadedFiles = {
-            photo: null,
-            aadhaar: null,
-            fatherAadhaar: null,
-            motherAadhaar: null
-        };
-        const fileUrls = {};
-
-        // DOM elements for wizard
-        const steps = document.querySelectorAll('.wizard-step');
-        const indicators = document.querySelectorAll('.step-indicator');
-        const prevBtn = document.getElementById('prevStepBtn');
-        const nextBtn = document.getElementById('nextStepBtn');
-        const submitBtn = document.getElementById('submitAdmissionBtn');
-        const stepCounter = document.getElementById('stepCounter');
-        let currentStep = 1;
-        const totalSteps = 4;
-
-        // ---------- Wizard Navigation ----------
-        function updateWizard(step) {
-            steps.forEach(s => s.classList.remove('active'));
-            indicators.forEach(ind => {
-                ind.classList.remove('active', 'completed');
-                const num = parseInt(ind.dataset.step);
-                if (num === step) ind.classList.add('active');
-                else if (num < step) ind.classList.add('completed');
-            });
-            document.querySelector(`.wizard-step[data-step="${step}"]`).classList.add('active');
-            currentStep = step;
-            stepCounter.textContent = `Step ${step} of ${totalSteps}`;
-            prevBtn.disabled = step === 1;
-            if (step === totalSteps) {
-                nextBtn.style.display = 'none';
-                submitBtn.style.display = 'inline-flex';
-            } else {
-                nextBtn.style.display = 'inline-flex';
-                submitBtn.style.display = 'none';
-            }
-        }
-
-        prevBtn.addEventListener('click', () => {
-            if (currentStep > 1) updateWizard(currentStep - 1);
-        });
-
-        nextBtn.addEventListener('click', () => {
-            // Validate step before moving
-            if (currentStep === 1) {
-                const name = document.getElementById('studentName').value.trim();
-                const cls = document.getElementById('studentClass').value;
-                if (!name || !cls) {
-                    showToast('Please fill Full Name and Class (required).', 'warning');
-                    return;
-                }
-            }
-            if (currentStep === 3) {
-                // Check required documents
-                if (!uploadedFiles.photo || !uploadedFiles.aadhaar) {
-                    showToast('Student Photo and Aadhaar Card are required.', 'warning');
-                    return;
-                }
-            }
-            if (currentStep < totalSteps) updateWizard(currentStep + 1);
-        });
-
-        // Allow clicking on step indicators to jump (only if previous steps completed)
-        indicators.forEach(ind => {
-            ind.addEventListener('click', () => {
-                const step = parseInt(ind.dataset.step);
-                if (step <= currentStep + 1) {
-                    updateWizard(step);
-                }
-            });
-        });
-
-        // ---------- File Upload Handlers ----------
-        function setupFileUpload(fieldId, inputId, progressId, previewId, fileNameId, previewImgId = null) {
-            const area = document.getElementById(fieldId);
-            const input = document.getElementById(inputId);
-            const progress = document.getElementById(progressId);
-            const preview = document.getElementById(previewId);
-            const fileName = document.getElementById(fileNameId);
-            const previewImg = previewImgId ? document.getElementById(previewImgId) : null;
-
-            input.addEventListener('change', async (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-
-                // Validate file size (5MB)
-                if (file.size > 5 * 1024 * 1024) {
-                    showToast('File size exceeds 5MB limit.', 'warning');
-                    input.value = '';
-                    return;
-                }
-
-                // Show progress
-                progress.classList.add('show');
-                const bar = progress.querySelector('.progress-bar');
-                bar.style.width = '0%';
-
-                try {
-                    // Upload to Firebase Storage
-                    const storagePath = `admissions/${Date.now()}_${file.name}`;
-                    const fileRef = storageRef(storage, storagePath);
-                    const uploadTask = uploadBytes(fileRef, file);
-
-                    // Simulate progress (we can't track upload progress easily with uploadBytes)
-                    // We'll just set to 50% and then 100% after completion
-                    bar.style.width = '50%';
-
-                    const snapshot = await uploadTask;
-                    bar.style.width = '100%';
-
-                    // Get download URL
-                    const url = await getDownloadURL(snapshot.ref);
-
-                    // Store the URL
-                    const field = fieldId.replace('Upload', '').toLowerCase();
-                    fileUrls[field] = url;
-                    uploadedFiles[field] = file;
-
-                    // Show preview
-                    preview.style.display = 'block';
-                    fileName.textContent = file.name;
-                    if (previewImg) {
-                        previewImg.src = URL.createObjectURL(file);
-                        previewImg.style.display = 'block';
-                    }
-
-                    // Hide progress after a moment
-                    setTimeout(() => {
-                        progress.classList.remove('show');
-                        bar.style.width = '0%';
-                    }, 500);
-
-                    showToast(`${file.name} uploaded successfully.`, 'success');
-
-                } catch (error) {
-                    console.error('Upload error:', error);
-                    showToast('Upload failed: ' + error.message, 'error');
-                    progress.classList.remove('show');
-                    input.value = '';
-                }
-            });
-
-            // Remove button
-            const removeBtn = preview.querySelector('.file-remove');
-            if (removeBtn) {
-                removeBtn.addEventListener('click', () => {
-                    const field = removeBtn.dataset.field;
-                    fileUrls[field] = null;
-                    uploadedFiles[field] = null;
-                    preview.style.display = 'none';
-                    if (previewImg) {
-                        previewImg.src = '#';
-                        previewImg.style.display = 'none';
-                    }
-                    input.value = '';
-                });
-            }
-
-            // Drag and drop support
-            area.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                area.classList.add('dragover');
-            });
-            area.addEventListener('dragleave', () => {
-                area.classList.remove('dragover');
-            });
-            area.addEventListener('drop', (e) => {
-                e.preventDefault();
-                area.classList.remove('dragover');
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    input.files = files;
-                    input.dispatchEvent(new Event('change'));
-                }
-            });
-        }
-
-        // Initialize file uploads
-        setupFileUpload('photoUpload', 'studentPhoto', 'photoProgress', 'photoPreview', 'photoFileName', 'photoPreviewImg');
-        setupFileUpload('aadhaarUpload', 'studentAadhaar', 'aadhaarProgress', 'aadhaarPreview', 'aadhaarFileName');
-        setupFileUpload('fatherAadhaarUpload', 'fatherAadhaar', 'fatherAadhaarProgress', 'fatherAadhaarPreview', 'fatherAadhaarFileName');
-        setupFileUpload('motherAadhaarUpload', 'motherAadhaar', 'motherAadhaarProgress', 'motherAadhaarPreview', 'motherAadhaarFileName');
-
-        // ---------- Preview & Print Functions ----------
-        function populatePrintForm(data) {
-            document.getElementById('printFormNo').textContent = data.formNo || '--';
-            document.getElementById('printDate').textContent = new Date().toLocaleDateString();
-            document.getElementById('printName').textContent = data.name || '--';
-            document.getElementById('printClass').textContent = data.class || '--';
-            document.getElementById('printSection').textContent = data.section || '--';
-            document.getElementById('printDOB').textContent = data.dob || '--';
-            document.getElementById('printGender').textContent = data.gender || '--';
-            document.getElementById('printPhone').textContent = data.phone || '--';
-            document.getElementById('printAddress').textContent = data.address || '--';
-            document.getElementById('printPrevSchool').textContent = data.prevSchool || '--';
-            document.getElementById('printPrevClass').textContent = data.prevClass || '--';
-            document.getElementById('printPrevYear').textContent = data.prevYear || '--';
-            document.getElementById('printPrevBoard').textContent = data.prevBoard || '--';
-            document.getElementById('printApar').textContent = data.aparId || '--';
-
-            // Photo
-            const printImg = document.getElementById('printPhoto');
-            if (fileUrls.photo) {
-                printImg.src = fileUrls.photo;
-                printImg.style.display = 'block';
-            } else {
-                printImg.style.display = 'none';
-            }
-        }
-
-        document.getElementById('previewFormBtn').addEventListener('click', () => {
-            const data = collectFormData();
-            populatePrintForm(data);
-            const printDiv = document.getElementById('printAdmissionForm');
-            printDiv.style.display = 'block';
-            // Scroll to preview
-            printDiv.scrollIntoView({ behavior: 'smooth' });
-            setTimeout(() => {
-                // We'll keep it visible, but we could also open a modal
-            }, 300);
-        });
-
-        document.getElementById('printFormBtn').addEventListener('click', () => {
-            const data = collectFormData();
-            populatePrintForm(data);
-            // Trigger print
-            window.print();
-        });
-
-        function collectFormData() {
-            return {
-                name: document.getElementById('studentName').value.trim(),
-                class: document.getElementById('studentClass').value,
-                section: document.getElementById('studentSection').value,
-                dob: document.getElementById('studentDOB').value,
-                gender: document.getElementById('studentGender').value,
-                phone: document.getElementById('studentPhone').value.trim(),
-                address: document.getElementById('studentAddress').value.trim(),
-                prevSchool: document.getElementById('prevSchool').value.trim(),
-                prevClass: document.getElementById('prevClass').value.trim(),
-                prevYear: document.getElementById('prevYear').value.trim(),
-                prevBoard: document.getElementById('prevBoard').value.trim(),
-                aparId: document.getElementById('aparId').value.trim(),
-                formNo: 'ADM-' + Date.now().toString().slice(-6)
-            };
-        }
-
-        // ---------- Form Submit ----------
-        document.getElementById('admissionForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('editAdmissionId').value;
-            const confirmCheck = document.getElementById('confirmCheck');
-            if (!confirmCheck.checked) {
-                showToast('Please confirm that all information is correct.', 'warning');
-                return;
-            }
-
-            // Collect all data
-            const data = {
-                studentName: document.getElementById('studentName').value.trim(),
-                class: document.getElementById('studentClass').value,
-                section: document.getElementById('studentSection').value,
-                dob: document.getElementById('studentDOB').value,
-                gender: document.getElementById('studentGender').value,
-                phone: document.getElementById('studentPhone').value.trim(),
-                address: document.getElementById('studentAddress').value.trim(),
-                prevSchool: document.getElementById('prevSchool').value.trim(),
-                prevClass: document.getElementById('prevClass').value.trim(),
-                prevYear: document.getElementById('prevYear').value.trim(),
-                prevBoard: document.getElementById('prevBoard').value.trim(),
-                aparId: document.getElementById('aparId').value.trim(),
-                // File URLs
-                photoUrl: fileUrls.photo || '',
-                aadhaarUrl: fileUrls.aadhaar || '',
-                fatherAadhaarUrl: fileUrls.fatherAadhaar || '',
-                motherAadhaarUrl: fileUrls.motherAadhaar || '',
-                status: 'pending',
-                updatedAt: Date.now()
-            };
-
-            if (!data.studentName || !data.class) {
-                showToast('Please fill all required fields.', 'warning');
-                return;
-            }
-
-            // Show loading
-            submitBtn.disabled = true;
-            submitBtn.querySelector('.spinner').style.display = 'inline-block';
-            submitBtn.querySelector('.btn-text').textContent = 'Submitting...';
-
-            try {
-                if (id) {
-                    await update(ref(database, `admissions/${id}`), data);
-                    showToast('Admission updated successfully!', 'success');
-                } else {
-                    const newRef = push(ref(database, 'admissions'));
-                    data.timestamp = Date.now();
-                    await set(newRef, data);
-                    showToast('Student admission submitted successfully.', 'success');
-                }
-                // Reset form and close modal
-                document.getElementById('admissionForm').reset();
-                document.getElementById('editAdmissionId').value = '';
-                // Reset file uploads
-                Object.keys(uploadedFiles).forEach(key => {
-                    uploadedFiles[key] = null;
-                    fileUrls[key] = null;
-                });
-                // Reset previews
-                document.querySelectorAll('.file-preview').forEach(el => el.style.display = 'none');
-                document.getElementById('printAdmissionForm').style.display = 'none';
-                document.getElementById('admissionModal').classList.remove('active');
-                // Reset wizard to step 1
-                updateWizard(1);
-                // Reset confirm checkbox
-                document.getElementById('confirmCheck').checked = false;
-            } catch (error) {
-                showToast('Error: ' + error.message, 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.querySelector('.spinner').style.display = 'none';
-                submitBtn.querySelector('.btn-text').textContent = 'Final Submit';
-            }
-        });
-
-        // ---------- Modal Controls ----------
-        function openAddModal() {
-            document.getElementById('admissionModalTitle').textContent = 'New Student Admission';
-            document.getElementById('admissionForm').reset();
-            document.getElementById('editAdmissionId').value = '';
-            document.getElementById('confirmCheck').checked = false;
-            // Reset file uploads
-            Object.keys(uploadedFiles).forEach(key => {
-                uploadedFiles[key] = null;
-                fileUrls[key] = null;
-            });
-            document.querySelectorAll('.file-preview').forEach(el => el.style.display = 'none');
-            document.getElementById('printAdmissionForm').style.display = 'none';
-            updateWizard(1);
-            document.getElementById('admissionModal').classList.add('active');
-        }
-
-        function openEditModal(id) {
-            const adm = allAdmissions.find(a => a.id === id);
-            if (!adm) {
-                showToast('Record not found', 'error');
-                return;
-            }
-            document.getElementById('admissionModalTitle').textContent = 'Edit Admission';
-            document.getElementById('editAdmissionId').value = id;
-            document.getElementById('studentName').value = adm.studentName || '';
-            document.getElementById('studentClass').value = adm.class || '';
-            document.getElementById('studentSection').value = adm.section || '';
-            document.getElementById('studentDOB').value = adm.dob || '';
-            document.getElementById('studentGender').value = adm.gender || 'Male';
-            document.getElementById('studentPhone').value = adm.phone || '';
-            document.getElementById('studentAddress').value = adm.address || '';
-            document.getElementById('prevSchool').value = adm.prevSchool || '';
-            document.getElementById('prevClass').value = adm.prevClass || '';
-            document.getElementById('prevYear').value = adm.prevYear || '';
-            document.getElementById('prevBoard').value = adm.prevBoard || '';
-            document.getElementById('aparId').value = adm.aparId || '';
-            // File URLs (preview)
-            if (adm.photoUrl) {
-                fileUrls.photo = adm.photoUrl;
-                const preview = document.getElementById('photoPreview');
-                preview.style.display = 'block';
-                document.getElementById('photoPreviewImg').src = adm.photoUrl;
-                document.getElementById('photoFileName').textContent = 'Photo (uploaded)';
-            }
-            if (adm.aadhaarUrl) {
-                fileUrls.aadhaar = adm.aadhaarUrl;
-                const preview = document.getElementById('aadhaarPreview');
-                preview.style.display = 'block';
-                document.getElementById('aadhaarFileName').textContent = 'Aadhaar (uploaded)';
-            }
-            if (adm.fatherAadhaarUrl) {
-                fileUrls.fatherAadhaar = adm.fatherAadhaarUrl;
-                const preview = document.getElementById('fatherAadhaarPreview');
-                preview.style.display = 'block';
-                document.getElementById('fatherAadhaarFileName').textContent = 'Father\'s Aadhaar (uploaded)';
-            }
-            if (adm.motherAadhaarUrl) {
-                fileUrls.motherAadhaar = adm.motherAadhaarUrl;
-                const preview = document.getElementById('motherAadhaarPreview');
-                preview.style.display = 'block';
-                document.getElementById('motherAadhaarFileName').textContent = 'Mother\'s Aadhaar (uploaded)';
-            }
-            document.getElementById('confirmCheck').checked = false;
-            updateWizard(1);
-            document.getElementById('admissionModal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('admissionModal').classList.remove('active');
-            document.getElementById('admissionForm').reset();
-            document.getElementById('editAdmissionId').value = '';
-        }
-
-        // Event listeners
-        document.getElementById('openAdmissionModalBtn').addEventListener('click', openAddModal);
-        document.getElementById('closeAdmissionModal').addEventListener('click', closeModal);
-        document.getElementById('admissionModal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
-
-        // ---------- Load Admissions (unchanged) ----------
-        function loadAdmissions() {
-            const admissionsRef = ref(database, 'admissions');
-            onValue(admissionsRef, (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    allAdmissions = Object.keys(data).map(key => ({
-                        id: key,
-                        ...data[key]
-                    }));
-                    allAdmissions.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                } else {
-                    allAdmissions = [];
-                }
-                applyFiltersAndRender();
-            }, (error) => {
-                showToast('Error loading admissions: ' + error.message, 'error');
-                document.getElementById('admissionTableBody').innerHTML = `<tr><td colspan="6" class="text-center">Error loading data</td></tr>`;
-            });
-        }
-
-        // ---------- Filter & Render (unchanged) ----------
-        function applyFiltersAndRender() {
-            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
-            const classFilter = document.getElementById('filterClass').value;
-            const statusFilter = document.getElementById('filterStatus').value;
-
-            filteredAdmissions = allAdmissions.filter(adm => {
-                const nameMatch = adm.studentName?.toLowerCase().includes(searchTerm) || false;
-                const classMatch = classFilter ? adm.class === classFilter : true;
-                const statusMatch = statusFilter ? adm.status === statusFilter : true;
-                return nameMatch && classMatch && statusMatch;
-            });
-
-            currentPage = 1;
-            renderTable();
-        }
-
-        function renderTable() {
-            const start = (currentPage - 1) * pageSize;
-            const end = start + pageSize;
-            const pageData = filteredAdmissions.slice(start, end);
-            const tbody = document.getElementById('admissionTableBody');
-
-            if (pageData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center">No admissions found</td></tr>`;
-                document.getElementById('admissionCount').textContent = 'Showing 0 entries';
-                return;
-            }
-
-            let html = '';
-            pageData.forEach(adm => {
-                const statusBadge = adm.status === 'approved' ? 'success' : adm.status === 'pending' ? 'warning' : 'danger';
-                const statusText = adm.status ? adm.status.charAt(0).toUpperCase() + adm.status.slice(1) : 'Pending';
-                const date = adm.timestamp ? new Date(adm.timestamp).toLocaleDateString() : 'N/A';
-                const initials = getInitials(adm.studentName);
-                html += `
-                    <tr>
-                        <td><input type="checkbox" class="row-checkbox" data-id="${adm.id}" /></td>
-                        <td><span class="table-avatar">${initials}</span> ${adm.studentName || 'Unknown'}</td>
-                        <td>${adm.class || 'N/A'}</td>
-                        <td>${date}</td>
-                        <td><span class="badge ${statusBadge}">${statusText}</span></td>
-                        <td>
-                            <button class="btn btn-outline-primary btn-sm edit-btn" data-id="${adm.id}">Edit</button>
-                            <button class="btn btn-danger btn-sm delete-btn" data-id="${adm.id}">Delete</button>
-                        </td>
-                    </tr>
-                `;
-            });
-            tbody.innerHTML = html;
-
-            const total = filteredAdmissions.length;
-            const totalPages = Math.ceil(total / pageSize) || 1;
-            document.getElementById('admissionCount').textContent = `Showing ${start+1}-${Math.min(end, total)} of ${total} entries`;
-            document.getElementById('page1').textContent = currentPage;
-            document.getElementById('prevPage').disabled = currentPage === 1;
-            document.getElementById('nextPage').disabled = currentPage >= totalPages;
-
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', () => openEditModal(btn.dataset.id));
-            });
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', () => confirmDelete(btn.dataset.id));
-            });
-
-            const selectAll = document.getElementById('selectAll');
-            if (selectAll) {
-                selectAll.checked = false;
-                selectAll.onchange = function() {
-                    document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = this.checked);
-                };
-            }
-        }
-
-        function getInitials(name) {
-            if (!name) return '??';
-            const parts = name.trim().split(' ');
-            if (parts.length === 1) return parts[0].substring(0,2).toUpperCase();
-            return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
-        }
-
-        // ---------- Delete Confirmation ----------
-        function confirmDelete(id) {
-            deleteTargetId = id;
-            document.getElementById('confirmModal').classList.add('active');
-        }
-
-        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
-            if (!deleteTargetId) return;
-            try {
-                await remove(ref(database, `admissions/${deleteTargetId}`));
-                showToast('Admission deleted successfully', 'success');
-            } catch (error) {
-                showToast('Error deleting: ' + error.message, 'error');
-            } finally {
-                document.getElementById('confirmModal').classList.remove('active');
-                deleteTargetId = null;
-            }
-        });
-
-        function closeConfirmModal() {
-            document.getElementById('confirmModal').classList.remove('active');
-            deleteTargetId = null;
-        }
-
-        document.getElementById('closeConfirmModal').addEventListener('click', closeConfirmModal);
-        document.getElementById('cancelConfirmBtn').addEventListener('click', closeConfirmModal);
-        document.getElementById('confirmModal').addEventListener('click', function(e) {
-            if (e.target === this) closeConfirmModal();
-        });
-
-        // ---------- Filter controls ----------
-        document.getElementById('applyFilterBtn').addEventListener('click', applyFiltersAndRender);
-        document.getElementById('resetFilterBtn').addEventListener('click', function() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('filterClass').value = '';
-            document.getElementById('filterStatus').value = '';
-            applyFiltersAndRender();
-        });
-        document.getElementById('searchInput').addEventListener('keyup', (e) => {
-            if (e.key === 'Enter') applyFiltersAndRender();
-        });
-
-        document.getElementById('prevPage').addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                renderTable();
-            }
-        });
-        document.getElementById('nextPage').addEventListener('click', () => {
-            const totalPages = Math.ceil(filteredAdmissions.length / pageSize);
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderTable();
-            }
-        });
-
-        // Initialize wizard
-        updateWizard(1);
-
-        console.log('Admission module with multi-step wizard and file uploads loaded.');
-    </script>
+    <!-- External Firebase Integration Module -->
+    <script type="module" src="../../assets/js/admission.js"></script>
 </body>
 </html>
