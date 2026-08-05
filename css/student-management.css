@@ -1,0 +1,170 @@
+/* Student Management Specific Styles */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    background: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #D1D5DB;
+}
+
+.search-box {
+    position: relative;
+    flex: 2;
+    min-width: 220px;
+}
+
+.search-box .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6B7280;
+    pointer-events: none;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px 16px 10px 40px;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.search-box input:focus {
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+
+.form-select {
+    padding: 10px 16px;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: white;
+    min-width: 150px;
+    outline: none;
+}
+
+.export-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: auto;
+}
+
+.btn-outline {
+    background: white;
+    color: #374151;
+    border: 1px solid #D1D5DB;
+}
+
+.btn-outline:hover {
+    background: #F9FAFB;
+    border-color: #9CA3AF;
+}
+
+.table-container {
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #D1D5DB;
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th {
+    background: #F9FAFB;
+    font-weight: 600;
+    color: #374151;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #E5E7EB;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.data-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #F3F4F6;
+    color: #4B5563;
+    font-size: 0.9rem;
+}
+
+.data-table tr:last-child td {
+    border-bottom: none;
+}
+
+.data-table tbody tr:hover {
+    background-color: #F9FAFB;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #9CA3AF;
+}
+
+.action-btns {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btns button {
+    background: none;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+    color: #4B5563;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btns .edit-btn:hover {
+    background: #EFF6FF;
+    border-color: #3B82F6;
+    color: #2563EB;
+}
+
+.action-btns .delete-btn:hover {
+    background: #FEF2F2;
+    border-color: #EF4444;
+    color: #DC2626;
+}
+
+.table-info {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: #6B7280;
+}
+
+/* Fee hint inside form */
+.fee-hint {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #2563EB;
+    font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .export-buttons {
+        margin-left: 0;
+        justify-content: flex-end;
+    }
+}
