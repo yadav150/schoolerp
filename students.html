@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hawaipur HSS · Students</title>
+
+    <!-- ===== Universal Styles ===== -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- ===== Page‑Specific Styles ===== -->
+    <link rel="stylesheet" href="css/students.css" />
+
+    <!-- ===== Font Awesome ===== -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+
+    <!-- ============================================================
+    WRAPPER
+    ============================================================ -->
+    <div class="app-wrapper">
+
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-brand">
+                <i class="fas fa-school sidebar-brand-icon"></i>
+                <span class="sidebar-brand-text">Hawaipur HSS</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">
+                            <i class="fas fa-th-large nav-icon"></i>
+                            <span class="nav-label">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="students.html" class="nav-link">
+                            <i class="fas fa-user-graduate nav-icon"></i>
+                            <span class="nav-label">Students</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="teachers.html" class="nav-link">
+                            <i class="fas fa-chalkboard-teacher nav-icon"></i>
+                            <span class="nav-label">Teachers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="admission.html" class="nav-link">
+                            <i class="fas fa-user-plus nav-icon"></i>
+                            <span class="nav-label">Admission</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="salary.html" class="nav-link">
+                            <i class="fas fa-wallet nav-icon"></i>
+                            <span class="nav-label">Salary</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="fee.html" class="nav-link">
+                            <i class="fas fa-coins nav-icon"></i>
+                            <span class="nav-label">Fee</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="receipts.html" class="nav-link">
+                            <i class="fas fa-receipt nav-icon"></i>
+                            <span class="nav-label">Receipts</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=1a237e&color=fff&size=40" alt="Admin avatar" class="sidebar-avatar" />
+                    <div class="sidebar-user-info">
+                        <span class="sidebar-user-name">Administrator</span>
+                        <span class="sidebar-user-role">School Admin</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <main class="main-content" id="mainContent">
+
+            <!-- ===== HEADER ===== -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="Toggle sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="header-search">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" placeholder="Search..." aria-label="Search" />
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <button class="header-btn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                    <button class="header-btn" aria-label="Messages">
+                        <i class="fas fa-envelope"></i>
+                        <span class="badge">5</span>
+                    </button>
+                    <div class="header-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=1a237e&color=fff&size=36" alt="Profile" class="profile-avatar" />
+                        <span class="profile-name">Admin</span>
+                        <i class="fas fa-chevron-down profile-chevron"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ===== PAGE CONTENT ===== -->
+            <section class="page-content">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Students</h1>
+                        <p class="page-subtitle">Manage all student records, enrollments, and profiles.</p>
+                    </div>
+                    <div class="page-actions">
+                        <button class="btn btn-outline" id="exportBtn">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                        <button class="btn btn-primary" id="addStudentBtn">
+                            <i class="fas fa-plus"></i> Add Student
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters & Search -->
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" class="form-control" id="searchInput" placeholder="Search by name, admission no, or class..." />
+                        </div>
+                        <select class="form-control" id="classFilter">
+                            <option value="">All Classes</option>
+                            <option value="1">Class 1</option>
+                            <option value="2">Class 2</option>
+                            <option value="3">Class 3</option>
+                            <option value="4">Class 4</option>
+                            <option value="5">Class 5</option>
+                            <option value="6">Class 6</option>
+                            <option value="7">Class 7</option>
+                            <option value="8">Class 8</option>
+                            <option value="9">Class 9</option>
+                            <option value="10">Class 10</option>
+                            <option value="11">Class 11</option>
+                            <option value="12">Class 12</option>
+                        </select>
+                        <select class="form-control" id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                            <option value="Graduated">Graduated</option>
+                        </select>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn btn-outline" id="resetFiltersBtn"><i class="fas fa-undo"></i> Reset</button>
+                    </div>
+                </div>
+
+                <!-- Students Table -->
+                <div class="card table-card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover" id="studentsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Admission No.</th>
+                                        <th>Student Name</th>
+                                        <th>Class</th>
+                                        <th>Section</th>
+                                        <th>Parent Contact</th>
+                                        <th>Status</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="studentsTableBody">
+                                    <!-- Rows inserted by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ===== FOOTER ===== -->
+            <footer class="app-footer">
+                <p>&copy; 2026 <strong>Hawaipur Higher Secondary School</strong> &middot; Hawaipur, West Karbi Anglong, Assam</p>
+                <p class="footer-version">v2.0 &middot; ERP System</p>
+            </footer>
+
+        </main>
+
+    </div>
+
+    <!-- ============================================================
+    MODAL: Add / Edit Student
+    ============================================================ -->
+    <div class="modal-overlay" id="studentModalOverlay">
+        <div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add New Student</h3>
+                <button class="modal-close" id="modalCloseBtn" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="studentForm" autocomplete="off">
+                    <input type="hidden" id="studentId" value="" />
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="admissionNo">Admission No.</label>
+                            <input type="text" class="form-control" id="admissionNo" required placeholder="e.g. 2026-001" />
+                        </div>
+                        <div class="form-group">
+                            <label for="studentName">Student Name</label>
+                            <input type="text" class="form-control" id="studentName" required placeholder="Full name" />
+                        </div>
+                        <div class="form-group">
+                            <label for="studentClass">Class</label>
+                            <select class="form-control" id="studentClass" required>
+                                <option value="">Select Class</option>
+                                <option value="1">Class 1</option>
+                                <option value="2">Class 2</option>
+                                <option value="3">Class 3</option>
+                                <option value="4">Class 4</option>
+                                <option value="5">Class 5</option>
+                                <option value="6">Class 6</option>
+                                <option value="7">Class 7</option>
+                                <option value="8">Class 8</option>
+                                <option value="9">Class 9</option>
+                                <option value="10">Class 10</option>
+                                <option value="11">Class 11</option>
+                                <option value="12">Class 12</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentSection">Section</label>
+                            <input type="text" class="form-control" id="studentSection" placeholder="e.g. A, B, C" maxlength="1" />
+                        </div>
+                        <div class="form-group">
+                            <label for="parentContact">Parent Contact</label>
+                            <input type="tel" class="form-control" id="parentContact" placeholder="Phone number" />
+                        </div>
+                        <div class="form-group">
+                            <label for="studentStatus">Status</label>
+                            <select class="form-control" id="studentStatus">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="Graduated">Graduated</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" id="modalCancelBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="modalSaveBtn">
+                            <i class="fas fa-save"></i> Save Student
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    SCRIPTS
+    ============================================================ -->
+
+    <!-- ===== Universal JavaScript ===== -->
+    <script src="js/app.js"></script>
+
+    <!-- ===== Page‑Specific JavaScript ===== -->
+    <script src="js/students.js"></script>
+
+</body>
+</html>
