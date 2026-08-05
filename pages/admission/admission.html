@@ -6,10 +6,20 @@
     <title>School ERP | Admission</title>
     <link rel="stylesheet" href="../../assets/css/style.css" />
     <link rel="stylesheet" href="../../assets/css/admission.css" />
+    <!-- Import Map for Firebase Modular SDK -->
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js",
+                "firebase/database": "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js"
+            }
+        }
+    </script>
 </head>
 <body>
 
-    <!-- SIDEBAR (same as dashboard) -->
+    <!-- ===== SIDEBAR (same as before, active link = Admission) ===== -->
     <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main Navigation">
         <div class="sidebar-brand">
             <div class="brand-icon">
@@ -51,7 +61,7 @@
         </div>
     </aside>
 
-    <!-- MAIN WRAPPER -->
+    <!-- ===== MAIN WRAPPER ===== -->
     <div class="main-wrapper">
         <!-- Header -->
         <header class="main-header">
@@ -66,7 +76,7 @@
             <div class="header-right">
                 <div class="header-search">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input type="text" placeholder="Search..." aria-label="Search" />
+                    <input type="text" placeholder="Search..." aria-label="Search" id="admissionSearch" />
                 </div>
                 <button class="header-btn" aria-label="Notifications">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -74,6 +84,9 @@
                 </button>
                 <button class="header-btn" aria-label="Messages">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </button>
+                <button class="header-btn" id="logoutBtn" aria-label="Logout" title="Logout">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
         </header>
@@ -84,7 +97,7 @@
             <div class="page-header">
                 <h1 class="page-title">Student Admission</h1>
                 <div class="page-actions">
-                    <button class="btn btn-primary" onclick="openModal('admissionModal')">
+                    <button class="btn btn-primary" id="openAdmissionModalBtn">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
                         New Admission
                     </button>
@@ -94,30 +107,34 @@
             <!-- Filters & Search -->
             <div class="admission-filters">
                 <div class="filter-group">
-                    <select class="form-control form-control-sm">
-                        <option>All Classes</option>
-                        <option>Class 10</option>
-                        <option>Class 9</option>
-                        <option>Class 8</option>
+                    <select class="form-control form-control-sm" id="filterClass">
+                        <option value="">All Classes</option>
+                        <option>10-A</option>
+                        <option>10-B</option>
+                        <option>9-A</option>
+                        <option>8-B</option>
+                        <option>12-A</option>
+                        <option>11-B</option>
                     </select>
-                    <select class="form-control form-control-sm">
-                        <option>All Status</option>
-                        <option>Approved</option>
-                        <option>Pending</option>
-                        <option>Rejected</option>
+                    <select class="form-control form-control-sm" id="filterStatus">
+                        <option value="">All Status</option>
+                        <option value="approved">Approved</option>
+                        <option value="pending">Pending</option>
+                        <option value="rejected">Rejected</option>
                     </select>
-                    <input type="text" class="form-control form-control-sm" placeholder="Search by name or ID" />
-                    <button class="btn btn-primary btn-sm">Apply</button>
+                    <input type="text" class="form-control form-control-sm" id="searchInput" placeholder="Search by name or ID" />
+                    <button class="btn btn-primary btn-sm" id="applyFilterBtn">Apply</button>
+                    <button class="btn btn-sm" id="resetFilterBtn">Reset</button>
                 </div>
             </div>
 
             <!-- Admissions Table -->
             <div class="card">
                 <div class="card-body p-0">
-                    <table class="table admission-table">
+                    <table class="table admission-table" id="admissionTable">
                         <thead>
                             <tr>
-                                <th><input type="checkbox" /></th>
+                                <th><input type="checkbox" id="selectAll" /></th>
                                 <th>Student Name</th>
                                 <th>Class</th>
                                 <th>Date Applied</th>
@@ -125,74 +142,20 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="admissionTableBody">
                             <tr>
-                                <td><input type="checkbox" /></td>
-                                <td><span class="table-avatar">SJ</span> Sarah Johnson</td>
-                                <td>10-A</td>
-                                <td>2026-08-03</td>
-                                <td><span class="badge success">Approved</span></td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-sm">View</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" /></td>
-                                <td><span class="table-avatar">MW</span> Mark Wilson</td>
-                                <td>8-B</td>
-                                <td>2026-08-02</td>
-                                <td><span class="badge success">Approved</span></td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-sm">View</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" /></td>
-                                <td><span class="table-avatar">EL</span> Emma Lee</td>
-                                <td>12-A</td>
-                                <td>2026-07-31</td>
-                                <td><span class="badge warning">Pending</span></td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-sm">View</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" /></td>
-                                <td><span class="table-avatar">JC</span> James Chen</td>
-                                <td>9-C</td>
-                                <td>2026-07-30</td>
-                                <td><span class="badge success">Approved</span></td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-sm">View</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" /></td>
-                                <td><span class="table-avatar">AK</span> Anna Kim</td>
-                                <td>11-B</td>
-                                <td>2026-07-28</td>
-                                <td><span class="badge danger">Rejected</span></td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-sm">View</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </td>
+                                <td colspan="6" class="text-center">Loading admissions...</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <!-- Pagination -->
                 <div class="card-footer d-flex align-center justify-between">
-                    <span class="text-muted">Showing 1-5 of 24 entries</span>
+                    <span class="text-muted" id="admissionCount">Showing 0 entries</span>
                     <div class="pagination">
-                        <button class="btn btn-sm">Prev</button>
-                        <button class="btn btn-sm btn-primary">1</button>
-                        <button class="btn btn-sm">2</button>
-                        <button class="btn btn-sm">3</button>
-                        <button class="btn btn-sm">Next</button>
+                        <button class="btn btn-sm" id="prevPage">Prev</button>
+                        <button class="btn btn-sm btn-primary" id="page1">1</button>
+                        <button class="btn btn-sm" id="nextPage">Next</button>
                     </div>
                 </div>
             </div>
@@ -205,15 +168,16 @@
         </footer>
     </div>
 
-    <!-- ===== ADMISSION MODAL ===== -->
+    <!-- ===== ADMISSION MODAL (Add/Edit) ===== -->
     <div class="modal-overlay" id="admissionModal">
         <div class="modal">
             <div class="modal-header">
-                <h3 class="modal-title">New Student Admission</h3>
-                <button class="modal-close" onclick="closeModal('admissionModal')">&times;</button>
+                <h3 class="modal-title" id="admissionModalTitle">New Student Admission</h3>
+                <button class="modal-close" id="closeAdmissionModal">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="admissionForm">
+                    <input type="hidden" id="editAdmissionId" />
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label" for="studentName">Full Name <span class="required">*</span></label>
@@ -223,10 +187,12 @@
                             <label class="form-label" for="studentClass">Class <span class="required">*</span></label>
                             <select id="studentClass" class="form-control" required>
                                 <option value="">Select Class</option>
-                                <option>Class 10-A</option>
-                                <option>Class 10-B</option>
-                                <option>Class 9-A</option>
-                                <option>Class 8-B</option>
+                                <option>10-A</option>
+                                <option>10-B</option>
+                                <option>9-A</option>
+                                <option>8-B</option>
+                                <option>12-A</option>
+                                <option>11-B</option>
                             </select>
                         </div>
                     </div>
@@ -248,25 +214,386 @@
                         <label class="form-label" for="studentAddress">Address</label>
                         <textarea id="studentAddress" class="form-control" rows="2" placeholder="Enter address"></textarea>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label" for="studentPhone">Phone</label>
-                        <input type="tel" id="studentPhone" class="form-control" placeholder="Enter phone number" />
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="studentPhone">Phone</label>
+                            <input type="tel" id="studentPhone" class="form-control" placeholder="Enter phone number" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="studentEmail">Email</label>
+                            <input type="email" id="studentEmail" class="form-control" placeholder="Enter email address" />
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="studentEmail">Email</label>
-                        <input type="email" id="studentEmail" class="form-control" placeholder="Enter email address" />
+                        <label class="form-label" for="studentStatus">Status</label>
+                        <select id="studentStatus" class="form-control">
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn" onclick="closeModal('admissionModal')">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Submit Admission</button>
+                        <button type="button" class="btn" id="cancelAdmissionBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="submitAdmissionBtn">
+                            <span class="btn-text">Submit Admission</span>
+                            <span class="spinner" style="display:none;"></span>
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- ===== CONFIRMATION DIALOG (inline) ===== -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal" style="max-width:400px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirm Deletion</h3>
+                <button class="modal-close" id="closeConfirmModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this admission record? This action cannot be undone.</p>
+                <div class="form-actions">
+                    <button class="btn" id="cancelConfirmBtn">Cancel</button>
+                    <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SCRIPTS ===== -->
     <script src="../../assets/js/script.js"></script>
-    <script src="../../assets/js/admission.js"></script>
+    <script type="module">
+        import { auth, database, ref, push, set, onValue, remove, update, onAuthStateChanged, signOut } from '../../assets/js/firebase.js';
+
+        // ---------- Authentication Check ----------
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = '../../login.html';
+                return;
+            }
+            // User is logged in, load admissions
+            loadAdmissions();
+        });
+
+        // ---------- Logout ----------
+        document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                window.location.href = '../../login.html';
+            } catch (error) {
+                showToast('Logout failed: ' + error.message, 'error');
+            }
+        });
+
+        // ---------- Global Variables ----------
+        let allAdmissions = [];
+        let filteredAdmissions = [];
+        let currentPage = 1;
+        const pageSize = 5;
+        let deleteTargetId = null;
+
+        // ---------- DOM Elements ----------
+        const tbody = document.getElementById('admissionTableBody');
+        const countSpan = document.getElementById('admissionCount');
+        const searchInput = document.getElementById('searchInput');
+        const filterClass = document.getElementById('filterClass');
+        const filterStatus = document.getElementById('filterStatus');
+        const applyBtn = document.getElementById('applyFilterBtn');
+        const resetBtn = document.getElementById('resetFilterBtn');
+        const prevPageBtn = document.getElementById('prevPage');
+        const nextPageBtn = document.getElementById('nextPage');
+        const page1Btn = document.getElementById('page1');
+
+        // Modal elements
+        const modal = document.getElementById('admissionModal');
+        const modalTitle = document.getElementById('admissionModalTitle');
+        const form = document.getElementById('admissionForm');
+        const editIdInput = document.getElementById('editAdmissionId');
+        const studentName = document.getElementById('studentName');
+        const studentClass = document.getElementById('studentClass');
+        const studentDOB = document.getElementById('studentDOB');
+        const studentGender = document.getElementById('studentGender');
+        const studentAddress = document.getElementById('studentAddress');
+        const studentPhone = document.getElementById('studentPhone');
+        const studentEmail = document.getElementById('studentEmail');
+        const studentStatus = document.getElementById('studentStatus');
+        const submitBtn = document.getElementById('submitAdmissionBtn');
+        const cancelBtn = document.getElementById('cancelAdmissionBtn');
+        const closeModalBtn = document.getElementById('closeAdmissionModal');
+        const openModalBtn = document.getElementById('openAdmissionModalBtn');
+
+        // Confirm modal
+        const confirmModal = document.getElementById('confirmModal');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
+        const closeConfirmBtn = document.getElementById('closeConfirmModal');
+
+        // ---------- Load Admissions from Firebase ----------
+        function loadAdmissions() {
+            const admissionsRef = ref(database, 'admissions');
+            onValue(admissionsRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    allAdmissions = Object.keys(data).map(key => ({
+                        id: key,
+                        ...data[key]
+                    }));
+                    // Sort by timestamp descending (newest first)
+                    allAdmissions.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                } else {
+                    allAdmissions = [];
+                }
+                applyFiltersAndRender();
+            }, (error) => {
+                showToast('Error loading admissions: ' + error.message, 'error');
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center">Error loading data</td></tr>`;
+            });
+        }
+
+        // ---------- Filter & Render ----------
+        function applyFiltersAndRender() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            const classFilter = filterClass.value;
+            const statusFilter = filterStatus.value;
+
+            filteredAdmissions = allAdmissions.filter(adm => {
+                const nameMatch = adm.studentName?.toLowerCase().includes(searchTerm) || false;
+                const classMatch = classFilter ? adm.class === classFilter : true;
+                const statusMatch = statusFilter ? adm.status === statusFilter : true;
+                return nameMatch && classMatch && statusMatch;
+            });
+
+            currentPage = 1; // reset to first page on filter
+            renderTable();
+        }
+
+        function renderTable() {
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageData = filteredAdmissions.slice(start, end);
+
+            if (pageData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center">No admissions found</td></tr>`;
+                countSpan.textContent = 'Showing 0 entries';
+                return;
+            }
+
+            let html = '';
+            pageData.forEach(adm => {
+                const statusBadge = adm.status === 'approved' ? 'success' : adm.status === 'pending' ? 'warning' : 'danger';
+                const statusText = adm.status ? adm.status.charAt(0).toUpperCase() + adm.status.slice(1) : 'Pending';
+                const date = adm.timestamp ? new Date(adm.timestamp).toLocaleDateString() : 'N/A';
+                const initials = getInitials(adm.studentName);
+                html += `
+                    <tr>
+                        <td><input type="checkbox" class="row-checkbox" data-id="${adm.id}" /></td>
+                        <td><span class="table-avatar">${initials}</span> ${adm.studentName || 'Unknown'}</td>
+                        <td>${adm.class || 'N/A'}</td>
+                        <td>${date}</td>
+                        <td><span class="badge ${statusBadge}">${statusText}</span></td>
+                        <td>
+                            <button class="btn btn-outline-primary btn-sm edit-btn" data-id="${adm.id}">Edit</button>
+                            <button class="btn btn-danger btn-sm delete-btn" data-id="${adm.id}">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+
+            // Update pagination info
+            const total = filteredAdmissions.length;
+            const totalPages = Math.ceil(total / pageSize) || 1;
+            countSpan.textContent = `Showing ${start+1}-${Math.min(end, total)} of ${total} entries`;
+            page1Btn.textContent = currentPage;
+            prevPageBtn.disabled = currentPage === 1;
+            nextPageBtn.disabled = currentPage >= totalPages;
+
+            // Attach event listeners to edit/delete buttons
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', () => openEditModal(btn.dataset.id));
+            });
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', () => confirmDelete(btn.dataset.id));
+            });
+
+            // Select all checkbox logic
+            const selectAll = document.getElementById('selectAll');
+            if (selectAll) {
+                selectAll.checked = false;
+                selectAll.onchange = function() {
+                    document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = this.checked);
+                };
+            }
+        }
+
+        // ---------- Helper: Initials ----------
+        function getInitials(name) {
+            if (!name) return '??';
+            const parts = name.trim().split(' ');
+            if (parts.length === 1) return parts[0].substring(0,2).toUpperCase();
+            return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+        }
+
+        // ---------- Open Add Modal ----------
+        function openAddModal() {
+            modalTitle.textContent = 'New Student Admission';
+            form.reset();
+            editIdInput.value = '';
+            studentStatus.value = 'pending';
+            submitBtn.querySelector('.btn-text').textContent = 'Submit Admission';
+            modal.classList.add('active');
+        }
+
+        // ---------- Open Edit Modal ----------
+        function openEditModal(id) {
+            const adm = allAdmissions.find(a => a.id === id);
+            if (!adm) {
+                showToast('Record not found', 'error');
+                return;
+            }
+            modalTitle.textContent = 'Edit Admission';
+            editIdInput.value = id;
+            studentName.value = adm.studentName || '';
+            studentClass.value = adm.class || '';
+            studentDOB.value = adm.dob || '';
+            studentGender.value = adm.gender || 'Male';
+            studentAddress.value = adm.address || '';
+            studentPhone.value = adm.phone || '';
+            studentEmail.value = adm.email || '';
+            studentStatus.value = adm.status || 'pending';
+            submitBtn.querySelector('.btn-text').textContent = 'Update Admission';
+            modal.classList.add('active');
+        }
+
+        // ---------- Close Modal ----------
+        function closeModal() {
+            modal.classList.remove('active');
+            form.reset();
+            editIdInput.value = '';
+        }
+
+        // ---------- Form Submit (Add/Edit) ----------
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = editIdInput.value;
+            const name = studentName.value.trim();
+            const cls = studentClass.value;
+            if (!name || !cls) {
+                showToast('Please fill all required fields', 'warning');
+                return;
+            }
+
+            const data = {
+                studentName: name,
+                class: cls,
+                dob: studentDOB.value || '',
+                gender: studentGender.value || '',
+                address: studentAddress.value || '',
+                phone: studentPhone.value || '',
+                email: studentEmail.value || '',
+                status: studentStatus.value || 'pending',
+                updatedAt: Date.now()
+            };
+
+            // Show loading
+            submitBtn.disabled = true;
+            submitBtn.querySelector('.spinner').style.display = 'inline-block';
+            submitBtn.querySelector('.btn-text').textContent = 'Saving...';
+
+            try {
+                if (id) {
+                    // Update existing
+                    await update(ref(database, `admissions/${id}`), data);
+                    showToast('Admission updated successfully!', 'success');
+                } else {
+                    // Add new
+                    const newRef = push(ref(database, 'admissions'));
+                    data.timestamp = Date.now();
+                    data.status = 'pending'; // default
+                    await set(newRef, data);
+                    showToast('New admission added successfully!', 'success');
+                }
+                closeModal();
+            } catch (error) {
+                showToast('Error: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.querySelector('.spinner').style.display = 'none';
+                submitBtn.querySelector('.btn-text').textContent = id ? 'Update Admission' : 'Submit Admission';
+            }
+        });
+
+        // ---------- Delete with Confirmation ----------
+        function confirmDelete(id) {
+            deleteTargetId = id;
+            confirmModal.classList.add('active');
+        }
+
+        confirmDeleteBtn.addEventListener('click', async () => {
+            if (!deleteTargetId) return;
+            try {
+                await remove(ref(database, `admissions/${deleteTargetId}`));
+                showToast('Admission deleted successfully', 'success');
+            } catch (error) {
+                showToast('Error deleting: ' + error.message, 'error');
+            } finally {
+                confirmModal.classList.remove('active');
+                deleteTargetId = null;
+            }
+        });
+
+        // ---------- Close Confirmation Modal ----------
+        function closeConfirmModal() {
+            confirmModal.classList.remove('active');
+            deleteTargetId = null;
+        }
+
+        // ---------- Event Listeners for Modal Controls ----------
+        openModalBtn.addEventListener('click', openAddModal);
+        cancelBtn.addEventListener('click', closeModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        // Click outside modal overlay to close
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+        confirmModal.addEventListener('click', function(e) {
+            if (e.target === this) closeConfirmModal();
+        });
+        cancelConfirmBtn.addEventListener('click', closeConfirmModal);
+        closeConfirmBtn.addEventListener('click', closeConfirmModal);
+
+        // ---------- Filter & Search Controls ----------
+        applyBtn.addEventListener('click', applyFiltersAndRender);
+        resetBtn.addEventListener('click', function() {
+            searchInput.value = '';
+            filterClass.value = '';
+            filterStatus.value = '';
+            applyFiltersAndRender();
+        });
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') applyFiltersAndRender();
+        });
+
+        // ---------- Pagination ----------
+        prevPageBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
+            }
+        });
+        nextPageBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(filteredAdmissions.length / pageSize);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable();
+            }
+        });
+
+        // ---------- Sidebar toggle (global) ----------
+        // The global script handles sidebar toggle, so we don't need to re-implement.
+
+        console.log('Admission module loaded.');
+    </script>
 </body>
 </html>
