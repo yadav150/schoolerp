@@ -22,11 +22,11 @@ import {
 import { 
     getStorage, 
     ref as storageRef, 
-    uploadBytes, 
+    uploadBytesResumable, 
     getDownloadURL 
 } from "firebase/storage";
 
-// Your Firebase configuration (from provided details)
+// Your Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBLX-DBrAZZgi7OGRW3-oeno0PJsZ9hzEg",          // <-- Replace with your actual API key
     authDomain: "its-me-ame.firebaseapp.com",
@@ -60,6 +60,6 @@ export {
     update,
     get,
     storageRef,
-    uploadBytes,
+    uploadBytesResumable,
     getDownloadURL
 };
