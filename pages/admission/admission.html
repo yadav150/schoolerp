@@ -12,14 +12,15 @@
             "imports": {
                 "firebase/app": "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js",
                 "firebase/auth": "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js",
-                "firebase/database": "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js"
+                "firebase/database": "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js",
+                "firebase/storage": "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js"
             }
         }
     </script>
 </head>
 <body>
 
-    <!-- ===== SIDEBAR (same as before, active link = Admission) ===== -->
+    <!-- ===== SIDEBAR (same as before) ===== -->
     <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main Navigation">
         <div class="sidebar-brand">
             <div class="brand-icon">
@@ -104,17 +105,22 @@
                 </div>
             </div>
 
-            <!-- Filters & Search -->
+            <!-- Filters & Search (unchanged) -->
             <div class="admission-filters">
                 <div class="filter-group">
                     <select class="form-control form-control-sm" id="filterClass">
                         <option value="">All Classes</option>
-                        <option>10-A</option>
-                        <option>10-B</option>
-                        <option>9-A</option>
-                        <option>8-B</option>
-                        <option>12-A</option>
-                        <option>11-B</option>
+                        <option>Nursery</option>
+                        <option>LKG</option>
+                        <option>UKG</option>
+                        <option>Class 1</option>
+                        <option>Class 2</option>
+                        <option>Class 3</option>
+                        <option>Class 4</option>
+                        <option>Class 5</option>
+                        <option>Class 6</option>
+                        <option>Class 7</option>
+                        <option>Class 8</option>
                     </select>
                     <select class="form-control form-control-sm" id="filterStatus">
                         <option value="">All Status</option>
@@ -128,7 +134,7 @@
                 </div>
             </div>
 
-            <!-- Admissions Table -->
+            <!-- Admissions Table (unchanged) -->
             <div class="card">
                 <div class="card-body p-0">
                     <table class="table admission-table" id="admissionTable">
@@ -149,7 +155,6 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- Pagination -->
                 <div class="card-footer d-flex align-center justify-between">
                     <span class="text-muted" id="admissionCount">Showing 0 entries</span>
                     <div class="pagination">
@@ -168,74 +173,236 @@
         </footer>
     </div>
 
-    <!-- ===== ADMISSION MODAL (Add/Edit) ===== -->
+    <!-- ============================================ -->
+    <!-- ADMISSION MODAL – Multi-Step Wizard            -->
+    <!-- ============================================ -->
     <div class="modal-overlay" id="admissionModal">
-        <div class="modal">
+        <div class="modal" style="max-width:700px;">
             <div class="modal-header">
                 <h3 class="modal-title" id="admissionModalTitle">New Student Admission</h3>
                 <button class="modal-close" id="closeAdmissionModal">&times;</button>
             </div>
             <div class="modal-body">
-                <form id="admissionForm">
+                <form id="admissionForm" enctype="multipart/form-data">
                     <input type="hidden" id="editAdmissionId" />
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="studentName">Full Name <span class="required">*</span></label>
-                            <input type="text" id="studentName" class="form-control" placeholder="Enter full name" required />
+
+                    <!-- Wizard Progress -->
+                    <div class="wizard-progress" id="wizardProgress">
+                        <div class="step-indicator active" data-step="1">
+                            <span class="step-number">1</span>
+                            <span class="step-label">Personal</span>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label" for="studentClass">Class <span class="required">*</span></label>
-                            <select id="studentClass" class="form-control" required>
-                                <option value="">Select Class</option>
-                                <option>10-A</option>
-                                <option>10-B</option>
-                                <option>9-A</option>
-                                <option>8-B</option>
-                                <option>12-A</option>
-                                <option>11-B</option>
-                            </select>
+                        <div class="step-indicator" data-step="2">
+                            <span class="step-number">2</span>
+                            <span class="step-label">Education</span>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="studentDOB">Date of Birth</label>
-                            <input type="date" id="studentDOB" class="form-control" />
+                        <div class="step-indicator" data-step="3">
+                            <span class="step-number">3</span>
+                            <span class="step-label">Documents</span>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label" for="studentGender">Gender</label>
-                            <select id="studentGender" class="form-control">
-                                <option>Male</option>
-                                <option>Female</option>
-                                <option>Other</option>
-                            </select>
+                        <div class="step-indicator" data-step="4">
+                            <span class="step-number">4</span>
+                            <span class="step-label">Confirm</span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label" for="studentAddress">Address</label>
-                        <textarea id="studentAddress" class="form-control" rows="2" placeholder="Enter address"></textarea>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="studentPhone">Phone</label>
-                            <input type="tel" id="studentPhone" class="form-control" placeholder="Enter phone number" />
+
+                    <!-- Step 1: Personal Details -->
+                    <div class="wizard-step active" data-step="1">
+                        <h4 class="wizard-step-title">Personal Details</h4>
+                        <p class="wizard-step-desc">Enter the student's personal information.</p>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="studentName">Full Name <span class="required">*</span></label>
+                                <input type="text" id="studentName" class="form-control" placeholder="Enter full name" required />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="studentClass">Class <span class="required">*</span></label>
+                                <select id="studentClass" class="form-control" required>
+                                    <option value="">Select Class</option>
+                                    <option>Nursery</option>
+                                    <option>LKG</option>
+                                    <option>UKG</option>
+                                    <option>Class 1</option>
+                                    <option>Class 2</option>
+                                    <option>Class 3</option>
+                                    <option>Class 4</option>
+                                    <option>Class 5</option>
+                                    <option>Class 6</option>
+                                    <option>Class 7</option>
+                                    <option>Class 8</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="studentSection">Section</label>
+                                <select id="studentSection" class="form-control">
+                                    <option value="">Select Section</option>
+                                    <option>A</option>
+                                    <option>B</option>
+                                    <option>C</option>
+                                    <option>NA</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="studentDOB">Date of Birth</label>
+                                <input type="date" id="studentDOB" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="studentGender">Gender</label>
+                                <select id="studentGender" class="form-control">
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="studentPhone">Phone</label>
+                                <input type="tel" id="studentPhone" class="form-control" placeholder="Enter phone number" />
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="studentEmail">Email</label>
-                            <input type="email" id="studentEmail" class="form-control" placeholder="Enter email address" />
+                            <label class="form-label" for="studentAddress">Address</label>
+                            <textarea id="studentAddress" class="form-control" rows="2" placeholder="Enter address"></textarea>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label" for="studentStatus">Status</label>
-                        <select id="studentStatus" class="form-control">
-                            <option value="pending">Pending</option>
-                            <option value="approved">Approved</option>
-                            <option value="rejected">Rejected</option>
-                        </select>
+
+                    <!-- Step 2: Previous Education -->
+                    <div class="wizard-step" data-step="2">
+                        <h4 class="wizard-step-title">Previous Education</h4>
+                        <p class="wizard-step-desc">Provide details of previous schooling (if any).</p>
+                        <div class="form-group">
+                            <label class="form-label" for="prevSchool">Previous School Name</label>
+                            <input type="text" id="prevSchool" class="form-control" placeholder="Enter school name" />
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="prevClass">Class Last Attended</label>
+                                <input type="text" id="prevClass" class="form-control" placeholder="e.g., Class 5" />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="prevYear">Year of Passing</label>
+                                <input type="text" id="prevYear" class="form-control" placeholder="e.g., 2024" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="prevBoard">Board / University</label>
+                            <input type="text" id="prevBoard" class="form-control" placeholder="e.g., CBSE, ICSE, State Board" />
+                        </div>
                     </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn" id="cancelAdmissionBtn">Cancel</button>
-                        <button type="submit" class="btn btn-primary" id="submitAdmissionBtn">
-                            <span class="btn-text">Submit Admission</span>
+
+                    <!-- Step 3: Document Upload -->
+                    <div class="wizard-step" data-step="3">
+                        <h4 class="wizard-step-title">Document Upload</h4>
+                        <p class="wizard-step-desc">Upload required documents (max 5MB each).</p>
+                        <div class="form-group">
+                            <label class="form-label">Student Photo <span class="required">*</span></label>
+                            <div class="file-upload-area" id="photoUpload">
+                                <svg class="upload-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                <div class="upload-text">Click or drag to upload photo</div>
+                                <div class="upload-hint">JPG, PNG, GIF (max 5MB)</div>
+                                <input type="file" id="studentPhoto" accept="image/*" />
+                                <div class="upload-progress" id="photoProgress">
+                                    <div class="progress-bar" style="width:0%;"></div>
+                                </div>
+                                <div class="file-preview" id="photoPreview" style="display:none;">
+                                    <img id="photoPreviewImg" src="#" alt="Preview" />
+                                    <span class="file-name" id="photoFileName"></span>
+                                    <button type="button" class="file-remove" data-field="photo">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Aadhaar Card <span class="required">*</span></label>
+                            <div class="file-upload-area" id="aadhaarUpload">
+                                <svg class="upload-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                <div class="upload-text">Click or drag to upload Aadhaar</div>
+                                <div class="upload-hint">JPG, PNG, PDF (max 5MB)</div>
+                                <input type="file" id="studentAadhaar" accept="image/*,.pdf" />
+                                <div class="upload-progress" id="aadhaarProgress">
+                                    <div class="progress-bar" style="width:0%;"></div>
+                                </div>
+                                <div class="file-preview" id="aadhaarPreview" style="display:none;">
+                                    <span class="file-name" id="aadhaarFileName"></span>
+                                    <button type="button" class="file-remove" data-field="aadhaar">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Father's Aadhaar</label>
+                                <div class="file-upload-area" id="fatherAadhaarUpload">
+                                    <svg class="upload-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                    <div class="upload-text">Click or drag to upload</div>
+                                    <div class="upload-hint">JPG, PNG, PDF (max 5MB)</div>
+                                    <input type="file" id="fatherAadhaar" accept="image/*,.pdf" />
+                                    <div class="upload-progress" id="fatherAadhaarProgress">
+                                        <div class="progress-bar" style="width:0%;"></div>
+                                    </div>
+                                    <div class="file-preview" id="fatherAadhaarPreview" style="display:none;">
+                                        <span class="file-name" id="fatherAadhaarFileName"></span>
+                                        <button type="button" class="file-remove" data-field="fatherAadhaar">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Mother's Aadhaar</label>
+                                <div class="file-upload-area" id="motherAadhaarUpload">
+                                    <svg class="upload-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                    <div class="upload-text">Click or drag to upload</div>
+                                    <div class="upload-hint">JPG, PNG, PDF (max 5MB)</div>
+                                    <input type="file" id="motherAadhaar" accept="image/*,.pdf" />
+                                    <div class="upload-progress" id="motherAadhaarProgress">
+                                        <div class="progress-bar" style="width:0%;"></div>
+                                    </div>
+                                    <div class="file-preview" id="motherAadhaarPreview" style="display:none;">
+                                        <span class="file-name" id="motherAadhaarFileName"></span>
+                                        <button type="button" class="file-remove" data-field="motherAadhaar">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">APAR ID (if available)</label>
+                            <input type="text" id="aparId" class="form-control" placeholder="Enter APAR ID" />
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Payment Confirmation & Final Submit -->
+                    <div class="wizard-step" data-step="4">
+                        <h4 class="wizard-step-title">Payment & Confirmation</h4>
+                        <p class="wizard-step-desc">Review the details and submit the admission.</p>
+                        <div style="background: var(--gray-50); padding: 16px; border-radius: var(--border-radius); margin-bottom: 16px;">
+                            <p style="font-size:14px; color:var(--gray-600);">
+                                <strong>Note:</strong> Payment will be processed after admission approval.
+                                Click "Final Submit" to complete the admission process.
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <label style="display:flex; align-items:center; gap:8px; font-size:14px;">
+                                <input type="checkbox" id="confirmCheck" required />
+                                I confirm that all information provided is correct and complete.
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" id="previewFormBtn" style="margin-right:8px;">
+                                Preview Admission Form
+                            </button>
+                            <button type="button" class="btn btn-success" id="printFormBtn">
+                                Print Form
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Wizard Navigation -->
+                    <div class="wizard-nav">
+                        <button type="button" class="btn" id="prevStepBtn" disabled>Previous</button>
+                        <span style="font-size:14px; color:var(--gray-500);" id="stepCounter">Step 1 of 4</span>
+                        <button type="button" class="btn btn-primary" id="nextStepBtn">Next</button>
+                        <button type="submit" class="btn btn-success" id="submitAdmissionBtn" style="display:none;">
+                            <span class="btn-text">Final Submit</span>
                             <span class="spinner" style="display:none;"></span>
                         </button>
                     </div>
@@ -244,7 +411,42 @@
         </div>
     </div>
 
-    <!-- ===== CONFIRMATION DIALOG (inline) ===== -->
+    <!-- ============================================ -->
+    <!-- PRINTABLE ADMISSION FORM (hidden until print) -->
+    <!-- ============================================ -->
+    <div class="print-admission-form" id="printAdmissionForm">
+        <div class="form-header">
+            <div class="school-name">SchoolERP International</div>
+            <div class="school-address">123 Education Street, Knowledge City, India - 110001</div>
+            <div class="form-title">Student Admission Application</div>
+        </div>
+        <div class="form-meta">
+            <div class="meta-item"><span class="label">Form No:</span> <span id="printFormNo">--</span></div>
+            <div class="meta-item"><span class="label">Date:</span> <span id="printDate">--</span></div>
+        </div>
+        <div class="form-body">
+            <div class="photo-section">
+                <img id="printPhoto" src="#" alt="Student Photo" style="display:none;" />
+            </div>
+            <div class="field-group"><span class="field-label">Full Name</span><span class="field-value" id="printName">--</span></div>
+            <div class="field-group"><span class="field-label">Class</span><span class="field-value" id="printClass">--</span></div>
+            <div class="field-group"><span class="field-label">Section</span><span class="field-value" id="printSection">--</span></div>
+            <div class="field-group"><span class="field-label">Date of Birth</span><span class="field-value" id="printDOB">--</span></div>
+            <div class="field-group"><span class="field-label">Gender</span><span class="field-value" id="printGender">--</span></div>
+            <div class="field-group"><span class="field-label">Phone</span><span class="field-value" id="printPhone">--</span></div>
+            <div class="field-group"><span class="field-label">Address</span><span class="field-value" id="printAddress">--</span></div>
+            <div class="field-group"><span class="field-label">Previous School</span><span class="field-value" id="printPrevSchool">--</span></div>
+            <div class="field-group"><span class="field-label">Class Last Attended</span><span class="field-value" id="printPrevClass">--</span></div>
+            <div class="field-group"><span class="field-label">Year of Passing</span><span class="field-value" id="printPrevYear">--</span></div>
+            <div class="field-group"><span class="field-label">Board</span><span class="field-value" id="printPrevBoard">--</span></div>
+            <div class="field-group"><span class="field-label">APAR ID</span><span class="field-value" id="printApar">--</span></div>
+        </div>
+        <div class="form-footer">
+            This is a computer-generated admission form. Please verify all details before submission.
+        </div>
+    </div>
+
+    <!-- ===== CONFIRMATION DIALOG (unchanged) ===== -->
     <div class="modal-overlay" id="confirmModal">
         <div class="modal" style="max-width:400px;">
             <div class="modal-header">
@@ -264,19 +466,22 @@
     <!-- ===== SCRIPTS ===== -->
     <script src="../../assets/js/script.js"></script>
     <script type="module">
-        import { auth, database, ref, push, set, onValue, remove, update, onAuthStateChanged, signOut } from '../../assets/js/firebase.js';
+        import {
+            auth, database, storage,
+            onAuthStateChanged, signOut,
+            ref, push, set, onValue, remove, update,
+            storageRef, uploadBytes, getDownloadURL
+        } from '../../assets/js/firebase.js';
 
-        // ---------- Authentication Check ----------
+        // ---------- Authentication ----------
         onAuthStateChanged(auth, (user) => {
             if (!user) {
                 window.location.href = '../../login.html';
                 return;
             }
-            // User is logged in, load admissions
             loadAdmissions();
         });
 
-        // ---------- Logout ----------
         document.getElementById('logoutBtn')?.addEventListener('click', async () => {
             try {
                 await signOut(auth);
@@ -293,43 +498,416 @@
         const pageSize = 5;
         let deleteTargetId = null;
 
-        // ---------- DOM Elements ----------
-        const tbody = document.getElementById('admissionTableBody');
-        const countSpan = document.getElementById('admissionCount');
-        const searchInput = document.getElementById('searchInput');
-        const filterClass = document.getElementById('filterClass');
-        const filterStatus = document.getElementById('filterStatus');
-        const applyBtn = document.getElementById('applyFilterBtn');
-        const resetBtn = document.getElementById('resetFilterBtn');
-        const prevPageBtn = document.getElementById('prevPage');
-        const nextPageBtn = document.getElementById('nextPage');
-        const page1Btn = document.getElementById('page1');
+        // File upload state
+        const uploadedFiles = {
+            photo: null,
+            aadhaar: null,
+            fatherAadhaar: null,
+            motherAadhaar: null
+        };
+        const fileUrls = {};
 
-        // Modal elements
-        const modal = document.getElementById('admissionModal');
-        const modalTitle = document.getElementById('admissionModalTitle');
-        const form = document.getElementById('admissionForm');
-        const editIdInput = document.getElementById('editAdmissionId');
-        const studentName = document.getElementById('studentName');
-        const studentClass = document.getElementById('studentClass');
-        const studentDOB = document.getElementById('studentDOB');
-        const studentGender = document.getElementById('studentGender');
-        const studentAddress = document.getElementById('studentAddress');
-        const studentPhone = document.getElementById('studentPhone');
-        const studentEmail = document.getElementById('studentEmail');
-        const studentStatus = document.getElementById('studentStatus');
+        // DOM elements for wizard
+        const steps = document.querySelectorAll('.wizard-step');
+        const indicators = document.querySelectorAll('.step-indicator');
+        const prevBtn = document.getElementById('prevStepBtn');
+        const nextBtn = document.getElementById('nextStepBtn');
         const submitBtn = document.getElementById('submitAdmissionBtn');
-        const cancelBtn = document.getElementById('cancelAdmissionBtn');
-        const closeModalBtn = document.getElementById('closeAdmissionModal');
-        const openModalBtn = document.getElementById('openAdmissionModalBtn');
+        const stepCounter = document.getElementById('stepCounter');
+        let currentStep = 1;
+        const totalSteps = 4;
 
-        // Confirm modal
-        const confirmModal = document.getElementById('confirmModal');
-        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-        const cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
-        const closeConfirmBtn = document.getElementById('closeConfirmModal');
+        // ---------- Wizard Navigation ----------
+        function updateWizard(step) {
+            steps.forEach(s => s.classList.remove('active'));
+            indicators.forEach(ind => {
+                ind.classList.remove('active', 'completed');
+                const num = parseInt(ind.dataset.step);
+                if (num === step) ind.classList.add('active');
+                else if (num < step) ind.classList.add('completed');
+            });
+            document.querySelector(`.wizard-step[data-step="${step}"]`).classList.add('active');
+            currentStep = step;
+            stepCounter.textContent = `Step ${step} of ${totalSteps}`;
+            prevBtn.disabled = step === 1;
+            if (step === totalSteps) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'inline-flex';
+            } else {
+                nextBtn.style.display = 'inline-flex';
+                submitBtn.style.display = 'none';
+            }
+        }
 
-        // ---------- Load Admissions from Firebase ----------
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 1) updateWizard(currentStep - 1);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            // Validate step before moving
+            if (currentStep === 1) {
+                const name = document.getElementById('studentName').value.trim();
+                const cls = document.getElementById('studentClass').value;
+                if (!name || !cls) {
+                    showToast('Please fill Full Name and Class (required).', 'warning');
+                    return;
+                }
+            }
+            if (currentStep === 3) {
+                // Check required documents
+                if (!uploadedFiles.photo || !uploadedFiles.aadhaar) {
+                    showToast('Student Photo and Aadhaar Card are required.', 'warning');
+                    return;
+                }
+            }
+            if (currentStep < totalSteps) updateWizard(currentStep + 1);
+        });
+
+        // Allow clicking on step indicators to jump (only if previous steps completed)
+        indicators.forEach(ind => {
+            ind.addEventListener('click', () => {
+                const step = parseInt(ind.dataset.step);
+                if (step <= currentStep + 1) {
+                    updateWizard(step);
+                }
+            });
+        });
+
+        // ---------- File Upload Handlers ----------
+        function setupFileUpload(fieldId, inputId, progressId, previewId, fileNameId, previewImgId = null) {
+            const area = document.getElementById(fieldId);
+            const input = document.getElementById(inputId);
+            const progress = document.getElementById(progressId);
+            const preview = document.getElementById(previewId);
+            const fileName = document.getElementById(fileNameId);
+            const previewImg = previewImgId ? document.getElementById(previewImgId) : null;
+
+            input.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                // Validate file size (5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    showToast('File size exceeds 5MB limit.', 'warning');
+                    input.value = '';
+                    return;
+                }
+
+                // Show progress
+                progress.classList.add('show');
+                const bar = progress.querySelector('.progress-bar');
+                bar.style.width = '0%';
+
+                try {
+                    // Upload to Firebase Storage
+                    const storagePath = `admissions/${Date.now()}_${file.name}`;
+                    const fileRef = storageRef(storage, storagePath);
+                    const uploadTask = uploadBytes(fileRef, file);
+
+                    // Simulate progress (we can't track upload progress easily with uploadBytes)
+                    // We'll just set to 50% and then 100% after completion
+                    bar.style.width = '50%';
+
+                    const snapshot = await uploadTask;
+                    bar.style.width = '100%';
+
+                    // Get download URL
+                    const url = await getDownloadURL(snapshot.ref);
+
+                    // Store the URL
+                    const field = fieldId.replace('Upload', '').toLowerCase();
+                    fileUrls[field] = url;
+                    uploadedFiles[field] = file;
+
+                    // Show preview
+                    preview.style.display = 'block';
+                    fileName.textContent = file.name;
+                    if (previewImg) {
+                        previewImg.src = URL.createObjectURL(file);
+                        previewImg.style.display = 'block';
+                    }
+
+                    // Hide progress after a moment
+                    setTimeout(() => {
+                        progress.classList.remove('show');
+                        bar.style.width = '0%';
+                    }, 500);
+
+                    showToast(`${file.name} uploaded successfully.`, 'success');
+
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    showToast('Upload failed: ' + error.message, 'error');
+                    progress.classList.remove('show');
+                    input.value = '';
+                }
+            });
+
+            // Remove button
+            const removeBtn = preview.querySelector('.file-remove');
+            if (removeBtn) {
+                removeBtn.addEventListener('click', () => {
+                    const field = removeBtn.dataset.field;
+                    fileUrls[field] = null;
+                    uploadedFiles[field] = null;
+                    preview.style.display = 'none';
+                    if (previewImg) {
+                        previewImg.src = '#';
+                        previewImg.style.display = 'none';
+                    }
+                    input.value = '';
+                });
+            }
+
+            // Drag and drop support
+            area.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                area.classList.add('dragover');
+            });
+            area.addEventListener('dragleave', () => {
+                area.classList.remove('dragover');
+            });
+            area.addEventListener('drop', (e) => {
+                e.preventDefault();
+                area.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    input.files = files;
+                    input.dispatchEvent(new Event('change'));
+                }
+            });
+        }
+
+        // Initialize file uploads
+        setupFileUpload('photoUpload', 'studentPhoto', 'photoProgress', 'photoPreview', 'photoFileName', 'photoPreviewImg');
+        setupFileUpload('aadhaarUpload', 'studentAadhaar', 'aadhaarProgress', 'aadhaarPreview', 'aadhaarFileName');
+        setupFileUpload('fatherAadhaarUpload', 'fatherAadhaar', 'fatherAadhaarProgress', 'fatherAadhaarPreview', 'fatherAadhaarFileName');
+        setupFileUpload('motherAadhaarUpload', 'motherAadhaar', 'motherAadhaarProgress', 'motherAadhaarPreview', 'motherAadhaarFileName');
+
+        // ---------- Preview & Print Functions ----------
+        function populatePrintForm(data) {
+            document.getElementById('printFormNo').textContent = data.formNo || '--';
+            document.getElementById('printDate').textContent = new Date().toLocaleDateString();
+            document.getElementById('printName').textContent = data.name || '--';
+            document.getElementById('printClass').textContent = data.class || '--';
+            document.getElementById('printSection').textContent = data.section || '--';
+            document.getElementById('printDOB').textContent = data.dob || '--';
+            document.getElementById('printGender').textContent = data.gender || '--';
+            document.getElementById('printPhone').textContent = data.phone || '--';
+            document.getElementById('printAddress').textContent = data.address || '--';
+            document.getElementById('printPrevSchool').textContent = data.prevSchool || '--';
+            document.getElementById('printPrevClass').textContent = data.prevClass || '--';
+            document.getElementById('printPrevYear').textContent = data.prevYear || '--';
+            document.getElementById('printPrevBoard').textContent = data.prevBoard || '--';
+            document.getElementById('printApar').textContent = data.aparId || '--';
+
+            // Photo
+            const printImg = document.getElementById('printPhoto');
+            if (fileUrls.photo) {
+                printImg.src = fileUrls.photo;
+                printImg.style.display = 'block';
+            } else {
+                printImg.style.display = 'none';
+            }
+        }
+
+        document.getElementById('previewFormBtn').addEventListener('click', () => {
+            const data = collectFormData();
+            populatePrintForm(data);
+            const printDiv = document.getElementById('printAdmissionForm');
+            printDiv.style.display = 'block';
+            // Scroll to preview
+            printDiv.scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                // We'll keep it visible, but we could also open a modal
+            }, 300);
+        });
+
+        document.getElementById('printFormBtn').addEventListener('click', () => {
+            const data = collectFormData();
+            populatePrintForm(data);
+            // Trigger print
+            window.print();
+        });
+
+        function collectFormData() {
+            return {
+                name: document.getElementById('studentName').value.trim(),
+                class: document.getElementById('studentClass').value,
+                section: document.getElementById('studentSection').value,
+                dob: document.getElementById('studentDOB').value,
+                gender: document.getElementById('studentGender').value,
+                phone: document.getElementById('studentPhone').value.trim(),
+                address: document.getElementById('studentAddress').value.trim(),
+                prevSchool: document.getElementById('prevSchool').value.trim(),
+                prevClass: document.getElementById('prevClass').value.trim(),
+                prevYear: document.getElementById('prevYear').value.trim(),
+                prevBoard: document.getElementById('prevBoard').value.trim(),
+                aparId: document.getElementById('aparId').value.trim(),
+                formNo: 'ADM-' + Date.now().toString().slice(-6)
+            };
+        }
+
+        // ---------- Form Submit ----------
+        document.getElementById('admissionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editAdmissionId').value;
+            const confirmCheck = document.getElementById('confirmCheck');
+            if (!confirmCheck.checked) {
+                showToast('Please confirm that all information is correct.', 'warning');
+                return;
+            }
+
+            // Collect all data
+            const data = {
+                studentName: document.getElementById('studentName').value.trim(),
+                class: document.getElementById('studentClass').value,
+                section: document.getElementById('studentSection').value,
+                dob: document.getElementById('studentDOB').value,
+                gender: document.getElementById('studentGender').value,
+                phone: document.getElementById('studentPhone').value.trim(),
+                address: document.getElementById('studentAddress').value.trim(),
+                prevSchool: document.getElementById('prevSchool').value.trim(),
+                prevClass: document.getElementById('prevClass').value.trim(),
+                prevYear: document.getElementById('prevYear').value.trim(),
+                prevBoard: document.getElementById('prevBoard').value.trim(),
+                aparId: document.getElementById('aparId').value.trim(),
+                // File URLs
+                photoUrl: fileUrls.photo || '',
+                aadhaarUrl: fileUrls.aadhaar || '',
+                fatherAadhaarUrl: fileUrls.fatherAadhaar || '',
+                motherAadhaarUrl: fileUrls.motherAadhaar || '',
+                status: 'pending',
+                updatedAt: Date.now()
+            };
+
+            if (!data.studentName || !data.class) {
+                showToast('Please fill all required fields.', 'warning');
+                return;
+            }
+
+            // Show loading
+            submitBtn.disabled = true;
+            submitBtn.querySelector('.spinner').style.display = 'inline-block';
+            submitBtn.querySelector('.btn-text').textContent = 'Submitting...';
+
+            try {
+                if (id) {
+                    await update(ref(database, `admissions/${id}`), data);
+                    showToast('Admission updated successfully!', 'success');
+                } else {
+                    const newRef = push(ref(database, 'admissions'));
+                    data.timestamp = Date.now();
+                    await set(newRef, data);
+                    showToast('Student admission submitted successfully.', 'success');
+                }
+                // Reset form and close modal
+                document.getElementById('admissionForm').reset();
+                document.getElementById('editAdmissionId').value = '';
+                // Reset file uploads
+                Object.keys(uploadedFiles).forEach(key => {
+                    uploadedFiles[key] = null;
+                    fileUrls[key] = null;
+                });
+                // Reset previews
+                document.querySelectorAll('.file-preview').forEach(el => el.style.display = 'none');
+                document.getElementById('printAdmissionForm').style.display = 'none';
+                document.getElementById('admissionModal').classList.remove('active');
+                // Reset wizard to step 1
+                updateWizard(1);
+                // Reset confirm checkbox
+                document.getElementById('confirmCheck').checked = false;
+            } catch (error) {
+                showToast('Error: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.querySelector('.spinner').style.display = 'none';
+                submitBtn.querySelector('.btn-text').textContent = 'Final Submit';
+            }
+        });
+
+        // ---------- Modal Controls ----------
+        function openAddModal() {
+            document.getElementById('admissionModalTitle').textContent = 'New Student Admission';
+            document.getElementById('admissionForm').reset();
+            document.getElementById('editAdmissionId').value = '';
+            document.getElementById('confirmCheck').checked = false;
+            // Reset file uploads
+            Object.keys(uploadedFiles).forEach(key => {
+                uploadedFiles[key] = null;
+                fileUrls[key] = null;
+            });
+            document.querySelectorAll('.file-preview').forEach(el => el.style.display = 'none');
+            document.getElementById('printAdmissionForm').style.display = 'none';
+            updateWizard(1);
+            document.getElementById('admissionModal').classList.add('active');
+        }
+
+        function openEditModal(id) {
+            const adm = allAdmissions.find(a => a.id === id);
+            if (!adm) {
+                showToast('Record not found', 'error');
+                return;
+            }
+            document.getElementById('admissionModalTitle').textContent = 'Edit Admission';
+            document.getElementById('editAdmissionId').value = id;
+            document.getElementById('studentName').value = adm.studentName || '';
+            document.getElementById('studentClass').value = adm.class || '';
+            document.getElementById('studentSection').value = adm.section || '';
+            document.getElementById('studentDOB').value = adm.dob || '';
+            document.getElementById('studentGender').value = adm.gender || 'Male';
+            document.getElementById('studentPhone').value = adm.phone || '';
+            document.getElementById('studentAddress').value = adm.address || '';
+            document.getElementById('prevSchool').value = adm.prevSchool || '';
+            document.getElementById('prevClass').value = adm.prevClass || '';
+            document.getElementById('prevYear').value = adm.prevYear || '';
+            document.getElementById('prevBoard').value = adm.prevBoard || '';
+            document.getElementById('aparId').value = adm.aparId || '';
+            // File URLs (preview)
+            if (adm.photoUrl) {
+                fileUrls.photo = adm.photoUrl;
+                const preview = document.getElementById('photoPreview');
+                preview.style.display = 'block';
+                document.getElementById('photoPreviewImg').src = adm.photoUrl;
+                document.getElementById('photoFileName').textContent = 'Photo (uploaded)';
+            }
+            if (adm.aadhaarUrl) {
+                fileUrls.aadhaar = adm.aadhaarUrl;
+                const preview = document.getElementById('aadhaarPreview');
+                preview.style.display = 'block';
+                document.getElementById('aadhaarFileName').textContent = 'Aadhaar (uploaded)';
+            }
+            if (adm.fatherAadhaarUrl) {
+                fileUrls.fatherAadhaar = adm.fatherAadhaarUrl;
+                const preview = document.getElementById('fatherAadhaarPreview');
+                preview.style.display = 'block';
+                document.getElementById('fatherAadhaarFileName').textContent = 'Father\'s Aadhaar (uploaded)';
+            }
+            if (adm.motherAadhaarUrl) {
+                fileUrls.motherAadhaar = adm.motherAadhaarUrl;
+                const preview = document.getElementById('motherAadhaarPreview');
+                preview.style.display = 'block';
+                document.getElementById('motherAadhaarFileName').textContent = 'Mother\'s Aadhaar (uploaded)';
+            }
+            document.getElementById('confirmCheck').checked = false;
+            updateWizard(1);
+            document.getElementById('admissionModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('admissionModal').classList.remove('active');
+            document.getElementById('admissionForm').reset();
+            document.getElementById('editAdmissionId').value = '';
+        }
+
+        // Event listeners
+        document.getElementById('openAdmissionModalBtn').addEventListener('click', openAddModal);
+        document.getElementById('closeAdmissionModal').addEventListener('click', closeModal);
+        document.getElementById('admissionModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ---------- Load Admissions (unchanged) ----------
         function loadAdmissions() {
             const admissionsRef = ref(database, 'admissions');
             onValue(admissionsRef, (snapshot) => {
@@ -339,7 +917,6 @@
                         id: key,
                         ...data[key]
                     }));
-                    // Sort by timestamp descending (newest first)
                     allAdmissions.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
                 } else {
                     allAdmissions = [];
@@ -347,15 +924,15 @@
                 applyFiltersAndRender();
             }, (error) => {
                 showToast('Error loading admissions: ' + error.message, 'error');
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center">Error loading data</td></tr>`;
+                document.getElementById('admissionTableBody').innerHTML = `<tr><td colspan="6" class="text-center">Error loading data</td></tr>`;
             });
         }
 
-        // ---------- Filter & Render ----------
+        // ---------- Filter & Render (unchanged) ----------
         function applyFiltersAndRender() {
-            const searchTerm = searchInput.value.trim().toLowerCase();
-            const classFilter = filterClass.value;
-            const statusFilter = filterStatus.value;
+            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+            const classFilter = document.getElementById('filterClass').value;
+            const statusFilter = document.getElementById('filterStatus').value;
 
             filteredAdmissions = allAdmissions.filter(adm => {
                 const nameMatch = adm.studentName?.toLowerCase().includes(searchTerm) || false;
@@ -364,7 +941,7 @@
                 return nameMatch && classMatch && statusMatch;
             });
 
-            currentPage = 1; // reset to first page on filter
+            currentPage = 1;
             renderTable();
         }
 
@@ -372,10 +949,11 @@
             const start = (currentPage - 1) * pageSize;
             const end = start + pageSize;
             const pageData = filteredAdmissions.slice(start, end);
+            const tbody = document.getElementById('admissionTableBody');
 
             if (pageData.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6" class="text-center">No admissions found</td></tr>`;
-                countSpan.textContent = 'Showing 0 entries';
+                document.getElementById('admissionCount').textContent = 'Showing 0 entries';
                 return;
             }
 
@@ -401,15 +979,13 @@
             });
             tbody.innerHTML = html;
 
-            // Update pagination info
             const total = filteredAdmissions.length;
             const totalPages = Math.ceil(total / pageSize) || 1;
-            countSpan.textContent = `Showing ${start+1}-${Math.min(end, total)} of ${total} entries`;
-            page1Btn.textContent = currentPage;
-            prevPageBtn.disabled = currentPage === 1;
-            nextPageBtn.disabled = currentPage >= totalPages;
+            document.getElementById('admissionCount').textContent = `Showing ${start+1}-${Math.min(end, total)} of ${total} entries`;
+            document.getElementById('page1').textContent = currentPage;
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage >= totalPages;
 
-            // Attach event listeners to edit/delete buttons
             document.querySelectorAll('.edit-btn').forEach(btn => {
                 btn.addEventListener('click', () => openEditModal(btn.dataset.id));
             });
@@ -417,7 +993,6 @@
                 btn.addEventListener('click', () => confirmDelete(btn.dataset.id));
             });
 
-            // Select all checkbox logic
             const selectAll = document.getElementById('selectAll');
             if (selectAll) {
                 selectAll.checked = false;
@@ -427,7 +1002,6 @@
             }
         }
 
-        // ---------- Helper: Initials ----------
         function getInitials(name) {
             if (!name) return '??';
             const parts = name.trim().split(' ');
@@ -435,102 +1009,13 @@
             return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
         }
 
-        // ---------- Open Add Modal ----------
-        function openAddModal() {
-            modalTitle.textContent = 'New Student Admission';
-            form.reset();
-            editIdInput.value = '';
-            studentStatus.value = 'pending';
-            submitBtn.querySelector('.btn-text').textContent = 'Submit Admission';
-            modal.classList.add('active');
-        }
-
-        // ---------- Open Edit Modal ----------
-        function openEditModal(id) {
-            const adm = allAdmissions.find(a => a.id === id);
-            if (!adm) {
-                showToast('Record not found', 'error');
-                return;
-            }
-            modalTitle.textContent = 'Edit Admission';
-            editIdInput.value = id;
-            studentName.value = adm.studentName || '';
-            studentClass.value = adm.class || '';
-            studentDOB.value = adm.dob || '';
-            studentGender.value = adm.gender || 'Male';
-            studentAddress.value = adm.address || '';
-            studentPhone.value = adm.phone || '';
-            studentEmail.value = adm.email || '';
-            studentStatus.value = adm.status || 'pending';
-            submitBtn.querySelector('.btn-text').textContent = 'Update Admission';
-            modal.classList.add('active');
-        }
-
-        // ---------- Close Modal ----------
-        function closeModal() {
-            modal.classList.remove('active');
-            form.reset();
-            editIdInput.value = '';
-        }
-
-        // ---------- Form Submit (Add/Edit) ----------
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = editIdInput.value;
-            const name = studentName.value.trim();
-            const cls = studentClass.value;
-            if (!name || !cls) {
-                showToast('Please fill all required fields', 'warning');
-                return;
-            }
-
-            const data = {
-                studentName: name,
-                class: cls,
-                dob: studentDOB.value || '',
-                gender: studentGender.value || '',
-                address: studentAddress.value || '',
-                phone: studentPhone.value || '',
-                email: studentEmail.value || '',
-                status: studentStatus.value || 'pending',
-                updatedAt: Date.now()
-            };
-
-            // Show loading
-            submitBtn.disabled = true;
-            submitBtn.querySelector('.spinner').style.display = 'inline-block';
-            submitBtn.querySelector('.btn-text').textContent = 'Saving...';
-
-            try {
-                if (id) {
-                    // Update existing
-                    await update(ref(database, `admissions/${id}`), data);
-                    showToast('Admission updated successfully!', 'success');
-                } else {
-                    // Add new
-                    const newRef = push(ref(database, 'admissions'));
-                    data.timestamp = Date.now();
-                    data.status = 'pending'; // default
-                    await set(newRef, data);
-                    showToast('New admission added successfully!', 'success');
-                }
-                closeModal();
-            } catch (error) {
-                showToast('Error: ' + error.message, 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.querySelector('.spinner').style.display = 'none';
-                submitBtn.querySelector('.btn-text').textContent = id ? 'Update Admission' : 'Submit Admission';
-            }
-        });
-
-        // ---------- Delete with Confirmation ----------
+        // ---------- Delete Confirmation ----------
         function confirmDelete(id) {
             deleteTargetId = id;
-            confirmModal.classList.add('active');
+            document.getElementById('confirmModal').classList.add('active');
         }
 
-        confirmDeleteBtn.addEventListener('click', async () => {
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
             if (!deleteTargetId) return;
             try {
                 await remove(ref(database, `admissions/${deleteTargetId}`));
@@ -538,51 +1023,41 @@
             } catch (error) {
                 showToast('Error deleting: ' + error.message, 'error');
             } finally {
-                confirmModal.classList.remove('active');
+                document.getElementById('confirmModal').classList.remove('active');
                 deleteTargetId = null;
             }
         });
 
-        // ---------- Close Confirmation Modal ----------
         function closeConfirmModal() {
-            confirmModal.classList.remove('active');
+            document.getElementById('confirmModal').classList.remove('active');
             deleteTargetId = null;
         }
 
-        // ---------- Event Listeners for Modal Controls ----------
-        openModalBtn.addEventListener('click', openAddModal);
-        cancelBtn.addEventListener('click', closeModal);
-        closeModalBtn.addEventListener('click', closeModal);
-        // Click outside modal overlay to close
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
-        confirmModal.addEventListener('click', function(e) {
+        document.getElementById('closeConfirmModal').addEventListener('click', closeConfirmModal);
+        document.getElementById('cancelConfirmBtn').addEventListener('click', closeConfirmModal);
+        document.getElementById('confirmModal').addEventListener('click', function(e) {
             if (e.target === this) closeConfirmModal();
         });
-        cancelConfirmBtn.addEventListener('click', closeConfirmModal);
-        closeConfirmBtn.addEventListener('click', closeConfirmModal);
 
-        // ---------- Filter & Search Controls ----------
-        applyBtn.addEventListener('click', applyFiltersAndRender);
-        resetBtn.addEventListener('click', function() {
-            searchInput.value = '';
-            filterClass.value = '';
-            filterStatus.value = '';
+        // ---------- Filter controls ----------
+        document.getElementById('applyFilterBtn').addEventListener('click', applyFiltersAndRender);
+        document.getElementById('resetFilterBtn').addEventListener('click', function() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('filterClass').value = '';
+            document.getElementById('filterStatus').value = '';
             applyFiltersAndRender();
         });
-        searchInput.addEventListener('keyup', (e) => {
+        document.getElementById('searchInput').addEventListener('keyup', (e) => {
             if (e.key === 'Enter') applyFiltersAndRender();
         });
 
-        // ---------- Pagination ----------
-        prevPageBtn.addEventListener('click', () => {
+        document.getElementById('prevPage').addEventListener('click', () => {
             if (currentPage > 1) {
                 currentPage--;
                 renderTable();
             }
         });
-        nextPageBtn.addEventListener('click', () => {
+        document.getElementById('nextPage').addEventListener('click', () => {
             const totalPages = Math.ceil(filteredAdmissions.length / pageSize);
             if (currentPage < totalPages) {
                 currentPage++;
@@ -590,10 +1065,10 @@
             }
         });
 
-        // ---------- Sidebar toggle (global) ----------
-        // The global script handles sidebar toggle, so we don't need to re-implement.
+        // Initialize wizard
+        updateWizard(1);
 
-        console.log('Admission module loaded.');
+        console.log('Admission module with multi-step wizard and file uploads loaded.');
     </script>
 </body>
 </html>
