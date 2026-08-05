@@ -1,5 +1,5 @@
 /**
- * STUDENTS MODULE – Student Records with Firebase
+ * STUDENTS MODULE – Student Records Management with Firebase
  * External JavaScript file for students.html
  */
 
@@ -75,7 +75,7 @@ const cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
 const closeConfirmBtn = document.getElementById('closeConfirmModal');
 
 // ============================================================
-// LOAD STUDENTS
+// LOAD STUDENTS FROM FIREBASE (Real-time)
 // ============================================================
 function loadStudents() {
     const studentsRef = ref(database, 'students');
@@ -102,18 +102,16 @@ function loadStudents() {
 // ============================================================
 function applyFiltersAndRender() {
     const searchTerm = searchInput.value.trim().toLowerCase();
-    const classFilter = filterClass.value;
-    const sectionFilter = filterSection.value;
-    const statusFilter = filterStatus.value;
+    const classFilterVal = filterClass.value;
+    const sectionFilterVal = filterSection.value;
+    const statusFilterVal = filterStatus.value;
 
     filteredStudents = allStudents.filter(student => {
         const nameMatch = student.name?.toLowerCase().includes(searchTerm) || false;
-        const idMatch = student.rollNo?.toLowerCase().includes(searchTerm) || false;
-        const searchMatch = nameMatch || idMatch;
-        const classMatch = classFilter ? student.class === classFilter : true;
-        const sectionMatch = sectionFilter ? student.section === sectionFilter : true;
-        const statusMatch = statusFilter ? student.status === statusFilter : true;
-        return searchMatch && classMatch && sectionMatch && statusMatch;
+        const classMatch = classFilterVal ? student.class === classFilterVal : true;
+        const sectionMatch = sectionFilterVal ? student.section === sectionFilterVal : true;
+        const statusMatch = statusFilterVal ? student.status === statusFilterVal : true;
+        return nameMatch && classMatch && sectionMatch && statusMatch;
     });
 
     currentPage = 1;
@@ -176,6 +174,9 @@ function renderTable() {
     }
 }
 
+// ============================================================
+// HELPERS
+// ============================================================
 function getInitials(name) {
     if (!name) return '??';
     const parts = name.trim().split(' ');
@@ -184,7 +185,7 @@ function getInitials(name) {
 }
 
 // ============================================================
-// MODAL OPEN/CLOSE
+// OPEN ADD MODAL
 // ============================================================
 function openAddModal() {
     modalTitle.textContent = 'Add Student';
@@ -195,6 +196,9 @@ function openAddModal() {
     modal.classList.add('active');
 }
 
+// ============================================================
+// OPEN EDIT MODAL
+// ============================================================
 function openEditModal(id) {
     const student = allStudents.find(s => s.id === id);
     if (!student) {
@@ -214,6 +218,9 @@ function openEditModal(id) {
     modal.classList.add('active');
 }
 
+// ============================================================
+// CLOSE MODAL
+// ============================================================
 function closeModal() {
     modal.classList.remove('active');
     form.reset();
@@ -221,7 +228,7 @@ function closeModal() {
 }
 
 // ============================================================
-// FORM SUBMIT
+// FORM SUBMIT (ADD/EDIT)
 // ============================================================
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -269,7 +276,7 @@ form.addEventListener('submit', async (e) => {
 });
 
 // ============================================================
-// DELETE
+// DELETE WITH CONFIRMATION
 // ============================================================
 function confirmDelete(id) {
     deleteTargetId = id;
@@ -295,7 +302,7 @@ function closeConfirmModal() {
 }
 
 // ============================================================
-// EVENT BINDINGS
+// EVENT LISTENERS
 // ============================================================
 openModalBtn.addEventListener('click', openAddModal);
 cancelBtn.addEventListener('click', closeModal);
@@ -335,16 +342,9 @@ nextPageBtn.addEventListener('click', () => {
     }
 });
 
-// Sidebar toggle (if not handled by global script)
-const sidebarToggle = document.getElementById('sidebarToggle');
-const sidebar = document.getElementById('sidebar');
-if (sidebarToggle && sidebar) {
-    sidebarToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
-    document.addEventListener('click', (e) => {
-        if (window.innerWidth <= 1024 && sidebar && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
-            sidebar.classList.remove('open');
-        }
-    });
-}
+// Export button (placeholder)
+document.getElementById('exportBtn')?.addEventListener('click', () => {
+    showToast('Export feature coming soon', 'info');
+});
 
 console.log('Students module loaded.');
