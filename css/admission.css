@@ -1,0 +1,167 @@
+/* ===== Admission Page ===== */
+
+/* Reuse same filter bar, table, modal styles */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--card-bg, #fff);
+    border-radius: var(--radius, 10px);
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.06));
+}
+
+.filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1 1 auto;
+}
+
+.filter-group .search-wrapper {
+    position: relative;
+    min-width: 220px;
+    flex: 1 1 200px;
+}
+
+.filter-group .search-wrapper .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 0.9rem;
+}
+
+.filter-group .search-wrapper input {
+    padding-left: 36px;
+    width: 100%;
+}
+
+.filter-group .form-control {
+    min-width: 140px;
+    flex: 1 0 140px;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.table-card .card-body {
+    padding: 0;
+    overflow-x: auto;
+}
+
+.table th {
+    font-weight: 600;
+    color: var(--text-muted, #5a6a7a);
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border-light, #e9edf2);
+}
+
+.table td {
+    vertical-align: middle;
+    padding: 0.85rem 0.75rem;
+}
+
+.table .actions-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.table .actions-cell .btn-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--text-muted, #6c7a8a);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.table .actions-cell .btn-icon:hover {
+    background: var(--primary-light, #e8edf9);
+    color: var(--primary, #1a237e);
+}
+
+.table .actions-cell .btn-icon.danger:hover {
+    background: #fde8e8;
+    color: #c62828;
+}
+
+/* Status badges */
+.status-badge {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.status-badge.pending {
+    background: #fff3e0;
+    color: #b45a1c;
+}
+
+.status-badge.approved {
+    background: #e3f5e9;
+    color: #1e7e34;
+}
+
+.status-badge.rejected {
+    background: #fde8e8;
+    color: #c62828;
+}
+
+/* Modal form grid */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 1.5rem;
+}
+
+.form-grid .form-group {
+    margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .filter-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-group .search-wrapper,
+    .filter-group .form-control {
+        min-width: 100%;
+        flex: 1 1 auto;
+    }
+
+    .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-actions {
+        justify-content: flex-end;
+    }
+}
