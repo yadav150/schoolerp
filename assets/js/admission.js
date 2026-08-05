@@ -1,6 +1,6 @@
 /**
  * ADMISSION MODULE – 3-Step Wizard with Full CRUD + Approve/Reject + Student Creation
- * External JavaScript file for admission.html
+ * Version: 2.0 – Added ID collision check and edit prevention
  */
 
 import {
@@ -91,10 +91,64 @@ const confirmMessage = document.getElementById('confirmMessage');
 // ============================================================
 // UTILITY FUNCTIONS
 // ============================================================
-function generateStudentId() {
-    const year = new Date().getFullYear();
-    const rand = String(Math.floor(1000 + Math.random() * 9000));
-    return `STU-${year}-${rand}`;
+
+// --- Check if Student ID is unique across admissions and students ---
+async function isIdUnique(studentId) {
+    // Check admissions
+    const admissionsRef = ref(database, 'admissions');
+    const admSnapshot = await get(admissionsRef);
+    const admData = admSnapshot.val();
+    if (admData) {
+        for (const key in admData) {
+            if (admData[key].studentId === studentId) {
+                return false;
+            }
+        }
+    }
+
+    // Check students
+    const studentsRef = ref(database, 'students');
+    const stuSnapshot = await get(studentsRef);
+    const stuData = stuSnapshot.val();
+    if (stuData) {
+        for (const key in stuData) {
+            if (stuData[key].studentId === studentId) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+// --- Generate unique Student ID (with collision check) ---
+async function generateStudentId() {
+    let attempts = 0;
+    const maxAttempts = 10;
+    let id = '';
+    let unique = false;
+
+    while (!unique && attempts < maxAttempts) {
+        const year = new Date().getFullYear();
+        const rand = String(Math.floor(1000 + Math.random() * 9000));
+        id = `STU-${year}-${rand}`;
+        unique = await isIdUnique(id);
+        attempts++;
+    }
+
+    if (!unique) {
+        // Fallback: use timestamp-based ID
+        const timestamp = Date.now().toString(36).toUpperCase();
+        id = `STU-${timestamp}`;
+        // Double-check this one too
+        const stillUnique = await isIdUnique(id);
+        if (!stillUnique) {
+            // Ultimate fallback: add random suffix
+            id = `STU-${timestamp}-${Math.floor(Math.random() * 1000)}`;
+        }
+    }
+
+    return id;
 }
 
 function generateFormNumber() {
@@ -180,10 +234,8 @@ function validateStep(step) {
 // CONFIRMATION POPULATION
 // ============================================================
 function populateConfirmation() {
-    // For edit mode, we need to use existing data if editing, else generate new.
     const id = editAdmissionId.value;
     if (id) {
-        // Edit mode: use existing data from allAdmissions
         const adm = allAdmissions.find(a => a.id === id);
         if (adm) {
             confirmStudentId.textContent = adm.studentId || '—';
@@ -197,8 +249,8 @@ function populateConfirmation() {
             return;
         }
     }
-    // Add mode: generate new
-    confirmStudentId.textContent = generateStudentId();
+    // Add mode: generate new (but don't generate if we're in edit mode without data)
+    confirmStudentId.textContent = 'Generating...';
     confirmFormNumber.textContent = generateFormNumber();
     confirmDate.textContent = getTodayDate();
     confirmName.textContent = sName.value.trim() || '—';
@@ -206,15 +258,27 @@ function populateConfirmation() {
     confirmEmail.textContent = sEmail.value.trim() || '—';
     confirmPhone.textContent = sPhone.value.trim() || '—';
     confirmAddress.textContent = sAddress.value.trim() || '—';
+
+    // Actually generate the ID asynchronously
+    (async () => {
+        const newId = await generateStudentId();
+        confirmStudentId.textContent = newId;
+    })();
 }
 
 // ============================================================
-// OPEN EDIT MODAL
+// OPEN EDIT MODAL (with status check)
 // ============================================================
 function openEditModal(id) {
     const adm = allAdmissions.find(a => a.id === id);
     if (!adm) {
         showToast('Record not found', 'error');
+        return;
+    }
+
+    // Prevent editing if approved or rejected
+    if (adm.status === 'approved' || adm.status === 'rejected') {
+        showToast(`Cannot edit a ${adm.status} admission. Only pending admissions can be edited.`, 'warning');
         return;
     }
 
@@ -270,7 +334,6 @@ async function approveAdmission(id) {
 
         if (studentExists) {
             showToast('Student with this ID already exists. Update status only.', 'warning');
-            // Still update status to approved
             await update(ref(database, `admissions/${id}`), {
                 status: 'approved',
                 updatedAt: Date.now()
@@ -360,15 +423,13 @@ form.addEventListener('submit', async function(e) {
 
     if (!id) {
         // Add mode: generate IDs and timestamp
-        data.studentId = generateStudentId();
+        data.studentId = await generateStudentId();
         data.formNumber = generateFormNumber();
         data.date = getTodayDate();
         data.status = 'pending';
         data.createdAt = Date.now();
     } else {
         // Edit mode: don't change studentId, formNumber, date, status, createdAt
-        // We keep the existing values from the database; we just update the fields above.
-        // We'll merge with existing data.
         const existing = allAdmissions.find(a => a.id === id);
         if (!existing) {
             showToast('Record not found', 'error');
@@ -380,7 +441,6 @@ form.addEventListener('submit', async function(e) {
         data.date = existing.date;
         data.status = existing.status;
         data.createdAt = existing.createdAt;
-        // But we don't need to send status if it's pending; we keep it.
     }
 
     finalSubmitBtn.disabled = true;
@@ -417,7 +477,6 @@ function resetForm() {
     form.reset();
     editAdmissionId.value = '';
     document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-    // Reset submit button text
     finalSubmitBtn.querySelector('.btn-text').textContent = 'Submit Admission';
     currentStep = 1;
     goToStep(1);
@@ -484,11 +543,18 @@ function renderTable() {
         const statusText = adm.status ? adm.status.charAt(0).toUpperCase() + adm.status.slice(1) : 'Pending';
         const date = adm.date || (adm.createdAt ? new Date(adm.createdAt).toLocaleDateString() : 'N/A');
         const initials = getInitials(adm.studentName);
+        const isLocked = adm.status === 'approved' || adm.status === 'rejected';
 
         // Build action buttons
-        let actionsHtml = `
-            <button class="btn btn-outline-primary btn-sm edit-btn" data-id="${adm.id}">Edit</button>
-        `;
+        let actionsHtml = '';
+        if (isLocked) {
+            actionsHtml += `<span class="badge info" style="margin-right:4px;">Locked</span>`;
+        } else {
+            actionsHtml += `
+                <button class="btn btn-outline-primary btn-sm edit-btn" data-id="${adm.id}">Edit</button>
+            `;
+        }
+
         if (adm.status === 'pending') {
             actionsHtml += `
                 <button class="btn btn-success btn-sm approve-btn" data-id="${adm.id}">Approve</button>
@@ -660,4 +726,4 @@ if (sidebarToggle && sidebar) {
 formCard.style.display = 'none';
 document.getElementById('admissionListContainer').style.display = 'block';
 
-console.log('Admission Module (with Approve/Reject/Edit/Student creation) loaded.');
+console.log('Admission Module (with ID collision check + edit prevention) loaded.');
