@@ -1,4 +1,4 @@
-/* === Universal Styles for EduERP === */
+/* === Universal Styles for EduERP (FIXED LAYOUT) === */
 *,
 *::before,
 *::after {
@@ -35,7 +35,7 @@ body {
     line-height: 1.5;
 }
 
-/* Sidebar */
+/* Sidebar – fixed, off‑canvas on mobile */
 .sidebar {
     width: var(--sidebar-width);
     background: #1E293B;
@@ -47,7 +47,18 @@ body {
     left: 0;
     bottom: 0;
     z-index: 100;
-    transition: transform var(--transition);
+    transform: translateX(0);
+    transition: transform 0.3s ease;
+}
+
+/* Mobile: sidebar hidden off‑screen */
+@media (max-width: 1024px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
 }
 
 .sidebar-brand {
@@ -130,6 +141,12 @@ body {
     z-index: 90;
 }
 
+@media (max-width: 1024px) {
+    .mobile-header {
+        display: flex;
+    }
+}
+
 .menu-toggle {
     background: none;
     border: none;
@@ -150,13 +167,26 @@ body {
     z-index: 95;
 }
 
-/* Main content */
+@media (max-width: 1024px) {
+    .sidebar-overlay.active {
+        display: block;
+    }
+}
+
+/* Main content – always uses remaining width */
 .main-content {
     margin-left: var(--sidebar-width);
     flex: 1;
     padding: 1.5rem 2rem;
     width: calc(100% - var(--sidebar-width));
     min-height: 100vh;
+}
+
+@media (max-width: 1024px) {
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
 }
 
 .page-header {
@@ -359,7 +389,7 @@ body {
     gap: 0.75rem;
 }
 
-/* Toast notifications */
+/* Toast */
 .toast-container {
     position: fixed;
     top: 1rem;
@@ -378,9 +408,6 @@ body {
     font-weight: 500;
     box-shadow: var(--shadow-md);
     animation: slideIn 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
 }
 
 .toast-success { background: var(--color-success); }
@@ -392,7 +419,6 @@ body {
     to { transform: translateX(0); opacity: 1; }
 }
 
-/* Link button */
 .link-btn {
     color: var(--color-primary);
     font-size: 0.85rem;
@@ -404,57 +430,13 @@ body {
     text-decoration: underline;
 }
 
-/* Quick actions */
-.quick-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-}
-
-.action-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem;
-    border-radius: var(--border-radius);
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: white;
-    transition: opacity var(--transition);
-}
-
-.action-btn:hover { opacity: 0.9; }
-.action-btn-blue { background: var(--color-primary); }
-.action-btn-green { background: var(--color-success); }
-.action-btn-purple { background: #8B5CF6; }
-.action-btn-orange { background: #F97316; }
-
-/* Responsive */
-@media (max-width: 1024px) {
-    .sidebar {
-        transform: translateX(-100%);
-    }
-    .sidebar.open {
-        transform: translateX(0);
-    }
-    .sidebar-overlay.active {
-        display: block;
-    }
-    .main-content {
-        margin-left: 0;
-        width: 100%;
-    }
-    .mobile-header {
-        display: flex;
-    }
+/* Responsive tables */
+.table-container {
+    overflow-x: auto;
 }
 
 @media (max-width: 640px) {
     .main-content {
         padding: 1rem;
-    }
-    .quick-actions {
-        grid-template-columns: 1fr;
     }
 }
