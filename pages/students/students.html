@@ -6,10 +6,20 @@
     <title>School ERP | Students</title>
     <link rel="stylesheet" href="../../assets/css/style.css" />
     <link rel="stylesheet" href="../../assets/css/students.css" />
+    <!-- Import Map for Firebase Modular SDK -->
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js",
+                "firebase/database": "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js"
+            }
+        }
+    </script>
 </head>
 <body>
 
-    <!-- ===== SIDEBAR (same as before, adjust active link) ===== -->
+    <!-- ===== SIDEBAR (active link = Students) ===== -->
     <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main Navigation">
         <div class="sidebar-brand">
             <div class="brand-icon">
@@ -66,7 +76,7 @@
             <div class="header-right">
                 <div class="header-search">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input type="text" placeholder="Search..." aria-label="Search" />
+                    <input type="text" placeholder="Search..." aria-label="Search" id="studentSearch" />
                 </div>
                 <button class="header-btn" aria-label="Notifications">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -74,6 +84,9 @@
                 </button>
                 <button class="header-btn" aria-label="Messages">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </button>
+                <button class="header-btn" id="logoutBtn" aria-label="Logout" title="Logout">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
             </div>
         </header>
@@ -84,11 +97,11 @@
             <div class="page-header">
                 <h1 class="page-title">Student Records</h1>
                 <div class="page-actions">
-                    <button class="btn btn-primary" onclick="openModal('studentModal')">
+                    <button class="btn btn-primary" id="openStudentModalBtn">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
                         Add Student
                     </button>
-                    <button class="btn btn-outline-primary">
+                    <button class="btn btn-outline-primary" id="exportBtn">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                         Export
                     </button>
@@ -98,37 +111,40 @@
             <!-- Filters -->
             <div class="student-filters">
                 <div class="filter-group">
-                    <select class="form-control form-control-sm">
-                        <option>All Classes</option>
-                        <option>Class 10</option>
-                        <option>Class 9</option>
-                        <option>Class 8</option>
+                    <select class="form-control form-control-sm" id="filterClass">
+                        <option value="">All Classes</option>
+                        <option>10-A</option>
+                        <option>10-B</option>
+                        <option>9-A</option>
+                        <option>8-B</option>
+                        <option>12-A</option>
+                        <option>11-B</option>
                     </select>
-                    <select class="form-control form-control-sm">
-                        <option>All Sections</option>
+                    <select class="form-control form-control-sm" id="filterSection">
+                        <option value="">All Sections</option>
                         <option>A</option>
                         <option>B</option>
                         <option>C</option>
                     </select>
-                    <select class="form-control form-control-sm">
-                        <option>All Status</option>
-                        <option>Active</option>
-                        <option>Inactive</option>
-                        <option>Graduated</option>
+                    <select class="form-control form-control-sm" id="filterStatus">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="graduated">Graduated</option>
                     </select>
-                    <input type="text" class="form-control form-control-sm" placeholder="Search by name or ID" />
-                    <button class="btn btn-primary btn-sm">Filter</button>
-                    <button class="btn btn-sm">Reset</button>
+                    <input type="text" class="form-control form-control-sm" id="searchInput" placeholder="Search by name or ID" />
+                    <button class="btn btn-primary btn-sm" id="applyFilterBtn">Filter</button>
+                    <button class="btn btn-sm" id="resetFilterBtn">Reset</button>
                 </div>
             </div>
 
             <!-- Students Table -->
             <div class="card">
                 <div class="card-body p-0">
-                    <table class="table student-table">
+                    <table class="table student-table" id="studentTable">
                         <thead>
                             <tr>
-                                <th><input type="checkbox" /></th>
+                                <th><input type="checkbox" id="selectAll" /></th>
                                 <th>Student</th>
                                 <th>Class</th>
                                 <th>Roll No</th>
@@ -137,92 +153,20 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="studentTableBody">
                             <tr>
-                                <td><input type="checkbox" /></td>
-                                <td><span class="table-avatar">SJ</span> Sarah Johnson</td>
-                                <td>10-A</td>
-                                <td>101</td>
-                                <td>+1 234 567 890</td>
-                                <td><span class="badge success">Active</span></td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-sm" onclick="openModal('studentModal')">Edit</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" /></td>
-                                <td><span class="table-avatar">MW</span> Mark Wilson</td>
-                                <td>8-B</td>
-                                <td>205</td>
-                                <td>+1 987 654 321</td>
-                                <td><span class="badge success">Active</span></td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-sm" onclick="openModal('studentModal')">Edit</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" /></td>
-                                <td><span class="table-avatar">EL</span> Emma Lee</td>
-                                <td>12-A</td>
-                                <td>12</td>
-                                <td>+1 456 789 012</td>
-                                <td><span class="badge warning">Inactive</span></td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-sm" onclick="openModal('studentModal')">Edit</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" /></td>
-                                <td><span class="table-avatar">JC</span> James Chen</td>
-                                <td>9-C</td>
-                                <td>89</td>
-                                <td>+1 321 654 987</td>
-                                <td><span class="badge success">Active</span></td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-sm" onclick="openModal('studentModal')">Edit</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" /></td>
-                                <td><span class="table-avatar">AK</span> Anna Kim</td>
-                                <td>11-B</td>
-                                <td>34</td>
-                                <td>+1 654 321 098</td>
-                                <td><span class="badge danger">Graduated</span></td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-sm" onclick="openModal('studentModal')">Edit</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" /></td>
-                                <td><span class="table-avatar">RT</span> Robert Taylor</td>
-                                <td>10-B</td>
-                                <td>107</td>
-                                <td>+1 789 012 345</td>
-                                <td><span class="badge success">Active</span></td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-sm" onclick="openModal('studentModal')">Edit</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </td>
+                                <td colspan="7" class="text-center">Loading students...</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <!-- Pagination -->
                 <div class="card-footer d-flex align-center justify-between">
-                    <span class="text-muted">Showing 1-6 of 48 entries</span>
+                    <span class="text-muted" id="studentCount">Showing 0 entries</span>
                     <div class="pagination">
-                        <button class="btn btn-sm">Prev</button>
-                        <button class="btn btn-sm btn-primary">1</button>
-                        <button class="btn btn-sm">2</button>
-                        <button class="btn btn-sm">3</button>
-                        <button class="btn btn-sm">4</button>
-                        <button class="btn btn-sm">Next</button>
+                        <button class="btn btn-sm" id="prevPage">Prev</button>
+                        <button class="btn btn-sm btn-primary" id="page1">1</button>
+                        <button class="btn btn-sm" id="nextPage">Next</button>
                     </div>
                 </div>
             </div>
@@ -240,10 +184,11 @@
         <div class="modal">
             <div class="modal-header">
                 <h3 class="modal-title" id="studentModalTitle">Add Student</h3>
-                <button class="modal-close" onclick="closeModal('studentModal')">&times;</button>
+                <button class="modal-close" id="closeStudentModal">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="studentForm">
+                    <input type="hidden" id="editStudentId" />
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label" for="studentName">Full Name <span class="required">*</span></label>
@@ -270,9 +215,9 @@
                         <div class="form-group">
                             <label class="form-label" for="studentStatus">Status</label>
                             <select id="studentStatus" class="form-control">
-                                <option>Active</option>
-                                <option>Inactive</option>
-                                <option>Graduated</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="graduated">Graduated</option>
                             </select>
                         </div>
                     </div>
@@ -291,16 +236,357 @@
                         <textarea id="studentAddress" class="form-control" rows="2" placeholder="Enter address"></textarea>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn" onclick="closeModal('studentModal')">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save Student</button>
+                        <button type="button" class="btn" id="cancelStudentBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="submitStudentBtn">
+                            <span class="btn-text">Save Student</span>
+                            <span class="spinner" style="display:none;"></span>
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- ===== CONFIRMATION DIALOG ===== -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal" style="max-width:400px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirm Deletion</h3>
+                <button class="modal-close" id="closeConfirmModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this student record? This action cannot be undone.</p>
+                <div class="form-actions">
+                    <button class="btn" id="cancelConfirmBtn">Cancel</button>
+                    <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SCRIPTS ===== -->
     <script src="../../assets/js/script.js"></script>
-    <script src="../../assets/js/students.js"></script>
+    <script type="module">
+        import { auth, database, ref, push, set, onValue, remove, update, onAuthStateChanged, signOut } from '../../assets/js/firebase.js';
+
+        // ---------- Authentication Check ----------
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = '../../login.html';
+                return;
+            }
+            loadStudents();
+        });
+
+        // ---------- Logout ----------
+        document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                window.location.href = '../../login.html';
+            } catch (error) {
+                showToast('Logout failed: ' + error.message, 'error');
+            }
+        });
+
+        // ---------- Global Variables ----------
+        let allStudents = [];
+        let filteredStudents = [];
+        let currentPage = 1;
+        const pageSize = 5;
+        let deleteTargetId = null;
+
+        // ---------- DOM Elements ----------
+        const tbody = document.getElementById('studentTableBody');
+        const countSpan = document.getElementById('studentCount');
+        const searchInput = document.getElementById('searchInput');
+        const filterClass = document.getElementById('filterClass');
+        const filterSection = document.getElementById('filterSection');
+        const filterStatus = document.getElementById('filterStatus');
+        const applyBtn = document.getElementById('applyFilterBtn');
+        const resetBtn = document.getElementById('resetFilterBtn');
+        const prevPageBtn = document.getElementById('prevPage');
+        const nextPageBtn = document.getElementById('nextPage');
+        const page1Btn = document.getElementById('page1');
+
+        // Modal elements
+        const modal = document.getElementById('studentModal');
+        const modalTitle = document.getElementById('studentModalTitle');
+        const form = document.getElementById('studentForm');
+        const editIdInput = document.getElementById('editStudentId');
+        const studentName = document.getElementById('studentName');
+        const studentClass = document.getElementById('studentClass');
+        const rollNo = document.getElementById('rollNo');
+        const studentStatus = document.getElementById('studentStatus');
+        const parentName = document.getElementById('parentName');
+        const parentPhone = document.getElementById('parentPhone');
+        const studentAddress = document.getElementById('studentAddress');
+        const submitBtn = document.getElementById('submitStudentBtn');
+        const cancelBtn = document.getElementById('cancelStudentBtn');
+        const closeModalBtn = document.getElementById('closeStudentModal');
+        const openModalBtn = document.getElementById('openStudentModalBtn');
+
+        // Confirm modal
+        const confirmModal = document.getElementById('confirmModal');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
+        const closeConfirmBtn = document.getElementById('closeConfirmModal');
+
+        // ---------- Load Students from Firebase ----------
+        function loadStudents() {
+            const studentsRef = ref(database, 'students');
+            onValue(studentsRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    allStudents = Object.keys(data).map(key => ({
+                        id: key,
+                        ...data[key]
+                    }));
+                    allStudents.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                } else {
+                    allStudents = [];
+                }
+                applyFiltersAndRender();
+            }, (error) => {
+                showToast('Error loading students: ' + error.message, 'error');
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center">Error loading data</td></tr>`;
+            });
+        }
+
+        // ---------- Filter & Render ----------
+        function applyFiltersAndRender() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            const classFilter = filterClass.value;
+            const sectionFilter = filterSection.value;
+            const statusFilter = filterStatus.value;
+
+            filteredStudents = allStudents.filter(student => {
+                const nameMatch = student.name?.toLowerCase().includes(searchTerm) || false;
+                const classMatch = classFilter ? student.class === classFilter : true;
+                const sectionMatch = sectionFilter ? student.section === sectionFilter : true;
+                const statusMatch = statusFilter ? student.status === statusFilter : true;
+                return nameMatch && classMatch && sectionMatch && statusMatch;
+            });
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        function renderTable() {
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageData = filteredStudents.slice(start, end);
+
+            if (pageData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center">No students found</td></tr>`;
+                countSpan.textContent = 'Showing 0 entries';
+                return;
+            }
+
+            let html = '';
+            pageData.forEach(student => {
+                const statusBadge = student.status === 'active' ? 'success' : student.status === 'inactive' ? 'warning' : 'danger';
+                const statusText = student.status ? student.status.charAt(0).toUpperCase() + student.status.slice(1) : 'Active';
+                const initials = getInitials(student.name);
+                html += `
+                    <tr>
+                        <td><input type="checkbox" class="row-checkbox" data-id="${student.id}" /></td>
+                        <td><span class="table-avatar">${initials}</span> ${student.name || 'Unknown'}</td>
+                        <td>${student.class || 'N/A'}</td>
+                        <td>${student.rollNo || 'N/A'}</td>
+                        <td>${student.parentPhone || 'N/A'}</td>
+                        <td><span class="badge ${statusBadge}">${statusText}</span></td>
+                        <td>
+                            <button class="btn btn-outline-primary btn-sm edit-btn" data-id="${student.id}">Edit</button>
+                            <button class="btn btn-danger btn-sm delete-btn" data-id="${student.id}">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+
+            const total = filteredStudents.length;
+            const totalPages = Math.ceil(total / pageSize) || 1;
+            countSpan.textContent = `Showing ${start+1}-${Math.min(end, total)} of ${total} entries`;
+            page1Btn.textContent = currentPage;
+            prevPageBtn.disabled = currentPage === 1;
+            nextPageBtn.disabled = currentPage >= totalPages;
+
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', () => openEditModal(btn.dataset.id));
+            });
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', () => confirmDelete(btn.dataset.id));
+            });
+
+            const selectAll = document.getElementById('selectAll');
+            if (selectAll) {
+                selectAll.checked = false;
+                selectAll.onchange = function() {
+                    document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = this.checked);
+                };
+            }
+        }
+
+        // ---------- Helper: Initials ----------
+        function getInitials(name) {
+            if (!name) return '??';
+            const parts = name.trim().split(' ');
+            if (parts.length === 1) return parts[0].substring(0,2).toUpperCase();
+            return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+        }
+
+        // ---------- Open Add Modal ----------
+        function openAddModal() {
+            modalTitle.textContent = 'Add Student';
+            form.reset();
+            editIdInput.value = '';
+            studentStatus.value = 'active';
+            submitBtn.querySelector('.btn-text').textContent = 'Save Student';
+            modal.classList.add('active');
+        }
+
+        // ---------- Open Edit Modal ----------
+        function openEditModal(id) {
+            const student = allStudents.find(s => s.id === id);
+            if (!student) {
+                showToast('Record not found', 'error');
+                return;
+            }
+            modalTitle.textContent = 'Edit Student';
+            editIdInput.value = id;
+            studentName.value = student.name || '';
+            studentClass.value = student.class || '';
+            rollNo.value = student.rollNo || '';
+            studentStatus.value = student.status || 'active';
+            parentName.value = student.parentName || '';
+            parentPhone.value = student.parentPhone || '';
+            studentAddress.value = student.address || '';
+            submitBtn.querySelector('.btn-text').textContent = 'Update Student';
+            modal.classList.add('active');
+        }
+
+        // ---------- Close Modal ----------
+        function closeModal() {
+            modal.classList.remove('active');
+            form.reset();
+            editIdInput.value = '';
+        }
+
+        // ---------- Form Submit (Add/Edit) ----------
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = editIdInput.value;
+            const name = studentName.value.trim();
+            const cls = studentClass.value;
+            if (!name || !cls) {
+                showToast('Please fill all required fields', 'warning');
+                return;
+            }
+
+            const data = {
+                name: name,
+                class: cls,
+                rollNo: rollNo.value.trim() || '',
+                status: studentStatus.value || 'active',
+                parentName: parentName.value.trim() || '',
+                parentPhone: parentPhone.value.trim() || '',
+                address: studentAddress.value.trim() || '',
+                updatedAt: Date.now()
+            };
+
+            submitBtn.disabled = true;
+            submitBtn.querySelector('.spinner').style.display = 'inline-block';
+            submitBtn.querySelector('.btn-text').textContent = 'Saving...';
+
+            try {
+                if (id) {
+                    await update(ref(database, `students/${id}`), data);
+                    showToast('Student updated successfully!', 'success');
+                } else {
+                    const newRef = push(ref(database, 'students'));
+                    data.createdAt = Date.now();
+                    await set(newRef, data);
+                    showToast('Student added successfully!', 'success');
+                }
+                closeModal();
+            } catch (error) {
+                showToast('Error: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.querySelector('.spinner').style.display = 'none';
+                submitBtn.querySelector('.btn-text').textContent = id ? 'Update Student' : 'Save Student';
+            }
+        });
+
+        // ---------- Delete with Confirmation ----------
+        function confirmDelete(id) {
+            deleteTargetId = id;
+            confirmModal.classList.add('active');
+        }
+
+        confirmDeleteBtn.addEventListener('click', async () => {
+            if (!deleteTargetId) return;
+            try {
+                await remove(ref(database, `students/${deleteTargetId}`));
+                showToast('Student deleted successfully', 'success');
+            } catch (error) {
+                showToast('Error deleting: ' + error.message, 'error');
+            } finally {
+                confirmModal.classList.remove('active');
+                deleteTargetId = null;
+            }
+        });
+
+        function closeConfirmModal() {
+            confirmModal.classList.remove('active');
+            deleteTargetId = null;
+        }
+
+        // ---------- Event Listeners ----------
+        openModalBtn.addEventListener('click', openAddModal);
+        cancelBtn.addEventListener('click', closeModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+        confirmModal.addEventListener('click', function(e) {
+            if (e.target === this) closeConfirmModal();
+        });
+        cancelConfirmBtn.addEventListener('click', closeConfirmModal);
+        closeConfirmBtn.addEventListener('click', closeConfirmModal);
+
+        applyBtn.addEventListener('click', applyFiltersAndRender);
+        resetBtn.addEventListener('click', function() {
+            searchInput.value = '';
+            filterClass.value = '';
+            filterSection.value = '';
+            filterStatus.value = '';
+            applyFiltersAndRender();
+        });
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') applyFiltersAndRender();
+        });
+
+        prevPageBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
+            }
+        });
+        nextPageBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(filteredStudents.length / pageSize);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable();
+            }
+        });
+
+        // Export button (placeholder)
+        document.getElementById('exportBtn')?.addEventListener('click', () => {
+            showToast('Export feature coming soon', 'info');
+        });
+
+        console.log('Students module loaded.');
+    </script>
 </body>
 </html>
