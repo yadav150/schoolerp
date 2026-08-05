@@ -6,10 +6,20 @@
     <title>School ERP | Dashboard</title>
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/dashboard.css" />
+    <!-- Import Map for Firebase Modular SDK -->
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js",
+                "firebase/database": "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js"
+            }
+        }
+    </script>
 </head>
 <body>
 
-    <!-- ===== SIDEBAR ===== -->
+    <!-- ===== SIDEBAR (unchanged, but active link) ===== -->
     <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main Navigation">
         <div class="sidebar-brand">
             <div class="brand-icon">
@@ -152,6 +162,9 @@
                 <button class="header-btn" aria-label="Messages">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                 </button>
+                <button class="header-btn" id="logoutBtn" aria-label="Logout" title="Logout">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </button>
             </div>
         </header>
 
@@ -159,44 +172,44 @@
         <main class="page-content" id="pageContent">
             <!-- Stats Row -->
             <section class="stats-grid" aria-label="Statistics">
-                <div class="stat-card">
+                <div class="stat-card" id="statStudents">
                     <div class="stat-icon blue">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     </div>
                     <div class="stat-content">
-                        <span class="stat-value">1,284</span>
+                        <span class="stat-value" id="totalStudents">0</span>
                         <span class="stat-label">Total Students</span>
-                        <span class="stat-change positive">+12% this month</span>
+                        <span class="stat-change positive" id="studentChange">Loading...</span>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" id="statTeachers">
                     <div class="stat-icon green">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                     </div>
                     <div class="stat-content">
-                        <span class="stat-value">86</span>
+                        <span class="stat-value" id="totalTeachers">0</span>
                         <span class="stat-label">Teachers</span>
-                        <span class="stat-change positive">+3 this month</span>
+                        <span class="stat-change positive" id="teacherChange">Loading...</span>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" id="statAttendance">
                     <div class="stat-icon orange">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     </div>
                     <div class="stat-content">
-                        <span class="stat-value">92%</span>
+                        <span class="stat-value" id="attendancePercent">0%</span>
                         <span class="stat-label">Attendance</span>
-                        <span class="stat-change positive">+2% this week</span>
+                        <span class="stat-change positive" id="attendanceChange">Loading...</span>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" id="statFees">
                     <div class="stat-icon purple">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
                     </div>
                     <div class="stat-content">
-                        <span class="stat-value">$284K</span>
+                        <span class="stat-value" id="feeCollected">$0</span>
                         <span class="stat-label">Fee Collected</span>
-                        <span class="stat-change positive">+8% this month</span>
+                        <span class="stat-change positive" id="feeChange">Loading...</span>
                     </div>
                 </div>
             </section>
@@ -208,41 +221,41 @@
                     <div class="card-header">
                         <h3 class="card-title">Attendance Overview</h3>
                         <div class="card-actions">
-                            <select class="form-select-sm">
-                                <option>This Week</option>
-                                <option>This Month</option>
-                                <option>This Year</option>
+                            <select class="form-select-sm" id="attendancePeriod">
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                                <option value="year">This Year</option>
                             </select>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="chart-placeholder">
+                        <div class="chart-placeholder" id="chartBars">
                             <div class="chart-bar-group">
-                                <div class="chart-bar" style="height:65%;"></div>
+                                <div class="chart-bar" style="height:0%;"></div>
                                 <span>Mon</span>
                             </div>
                             <div class="chart-bar-group">
-                                <div class="chart-bar" style="height:78%;"></div>
+                                <div class="chart-bar" style="height:0%;"></div>
                                 <span>Tue</span>
                             </div>
                             <div class="chart-bar-group">
-                                <div class="chart-bar" style="height:55%;"></div>
+                                <div class="chart-bar" style="height:0%;"></div>
                                 <span>Wed</span>
                             </div>
                             <div class="chart-bar-group">
-                                <div class="chart-bar" style="height:92%;"></div>
+                                <div class="chart-bar" style="height:0%;"></div>
                                 <span>Thu</span>
                             </div>
                             <div class="chart-bar-group">
-                                <div class="chart-bar" style="height:70%;"></div>
+                                <div class="chart-bar" style="height:0%;"></div>
                                 <span>Fri</span>
                             </div>
                             <div class="chart-bar-group">
-                                <div class="chart-bar" style="height:60%;"></div>
+                                <div class="chart-bar" style="height:0%;"></div>
                                 <span>Sat</span>
                             </div>
                             <div class="chart-bar-group">
-                                <div class="chart-bar" style="height:45%;"></div>
+                                <div class="chart-bar" style="height:0%;"></div>
                                 <span>Sun</span>
                             </div>
                         </div>
@@ -256,40 +269,12 @@
                         <a href="#" class="card-link">View All</a>
                     </div>
                     <div class="card-body">
-                        <ul class="activity-list">
+                        <ul class="activity-list" id="activityList">
                             <li class="activity-item">
                                 <span class="activity-dot blue"></span>
                                 <div class="activity-content">
-                                    <p class="activity-text">New student <strong>Sarah Johnson</strong> admitted to Class 10-A</p>
-                                    <span class="activity-time">2 min ago</span>
-                                </div>
-                            </li>
-                            <li class="activity-item">
-                                <span class="activity-dot green"></span>
-                                <div class="activity-content">
-                                    <p class="activity-text">Fee payment of <strong>$450</strong> received from Mark Wilson</p>
-                                    <span class="activity-time">15 min ago</span>
-                                </div>
-                            </li>
-                            <li class="activity-item">
-                                <span class="activity-dot orange"></span>
-                                <div class="activity-content">
-                                    <p class="activity-text">Attendance marked for <strong>Class 10-B</strong> (32 present / 35 total)</p>
-                                    <span class="activity-time">1 hour ago</span>
-                                </div>
-                            </li>
-                            <li class="activity-item">
-                                <span class="activity-dot purple"></span>
-                                <div class="activity-content">
-                                    <p class="activity-text">Exam schedule for <strong>Mid-Term 2026</strong> published</p>
-                                    <span class="activity-time">3 hours ago</span>
-                                </div>
-                            </li>
-                            <li class="activity-item">
-                                <span class="activity-dot red"></span>
-                                <div class="activity-content">
-                                    <p class="activity-text">Library book <strong>"To Kill a Mockingbird"</strong> overdue (5 days)</p>
-                                    <span class="activity-time">5 hours ago</span>
+                                    <p class="activity-text">No recent activity</p>
+                                    <span class="activity-time">Loading...</span>
                                 </div>
                             </li>
                         </ul>
@@ -306,7 +291,7 @@
                         <a href="pages/admission/admission.html" class="card-link">View All</a>
                     </div>
                     <div class="card-body p-0">
-                        <table class="table table-compact">
+                        <table class="table table-compact" id="recentAdmissionsTable">
                             <thead>
                                 <tr>
                                     <th>Student</th>
@@ -315,30 +300,9 @@
                                     <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="recentAdmissionsBody">
                                 <tr>
-                                    <td><span class="table-avatar">SJ</span> Sarah Johnson</td>
-                                    <td>10-A</td>
-                                    <td>2026-08-03</td>
-                                    <td><span class="badge success">Approved</span></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="table-avatar">MW</span> Mark Wilson</td>
-                                    <td>8-B</td>
-                                    <td>2026-08-02</td>
-                                    <td><span class="badge success">Approved</span></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="table-avatar">EL</span> Emma Lee</td>
-                                    <td>12-A</td>
-                                    <td>2026-07-31</td>
-                                    <td><span class="badge warning">Pending</span></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="table-avatar">JC</span> James Chen</td>
-                                    <td>9-C</td>
-                                    <td>2026-07-30</td>
-                                    <td><span class="badge success">Approved</span></td>
+                                    <td colspan="4" class="text-center">Loading...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -352,22 +316,22 @@
                         <a href="pages/fees/fees.html" class="card-link">View All</a>
                     </div>
                     <div class="card-body">
-                        <div class="fee-summary">
+                        <div class="fee-summary" id="feeSummary">
                             <div class="fee-item">
                                 <span class="fee-label">Total Collected</span>
-                                <span class="fee-value">$284,500</span>
+                                <span class="fee-value" id="totalCollected">$0</span>
                             </div>
                             <div class="fee-item">
                                 <span class="fee-label">Pending</span>
-                                <span class="fee-value">$42,300</span>
+                                <span class="fee-value" id="pendingFees">$0</span>
                             </div>
                             <div class="fee-item">
                                 <span class="fee-label">Overdue</span>
-                                <span class="fee-value">$12,800</span>
+                                <span class="fee-value" id="overdueFees">$0</span>
                             </div>
                             <div class="fee-progress">
-                                <div class="fee-progress-bar" style="width:78%;"></div>
-                                <span class="fee-progress-label">78% Collected</span>
+                                <div class="fee-progress-bar" id="feeProgressBar" style="width:0%;"></div>
+                                <span class="fee-progress-label" id="feeProgressLabel">0% Collected</span>
                             </div>
                         </div>
                     </div>
@@ -413,45 +377,15 @@
                         <a href="#" class="card-link">View Calendar</a>
                     </div>
                     <div class="card-body">
-                        <ul class="event-list">
+                        <ul class="event-list" id="eventList">
                             <li class="event-item">
                                 <span class="event-date">
-                                    <span class="event-day">12</span>
-                                    <span class="event-month">Aug</span>
+                                    <span class="event-day">--</span>
+                                    <span class="event-month">---</span>
                                 </span>
                                 <div class="event-info">
-                                    <p class="event-title">Mid-Term Exams Begin</p>
-                                    <span class="event-time">8:00 AM - 1:00 PM</span>
-                                </div>
-                            </li>
-                            <li class="event-item">
-                                <span class="event-date">
-                                    <span class="event-day">15</span>
-                                    <span class="event-month">Aug</span>
-                                </span>
-                                <div class="event-info">
-                                    <p class="event-title">Independence Day Celebration</p>
-                                    <span class="event-time">9:00 AM - 12:00 PM</span>
-                                </div>
-                            </li>
-                            <li class="event-item">
-                                <span class="event-date">
-                                    <span class="event-day">20</span>
-                                    <span class="event-month">Aug</span>
-                                </span>
-                                <div class="event-info">
-                                    <p class="event-title">Parent-Teacher Meeting</p>
-                                    <span class="event-time">2:00 PM - 5:00 PM</span>
-                                </div>
-                            </li>
-                            <li class="event-item">
-                                <span class="event-date">
-                                    <span class="event-day">25</span>
-                                    <span class="event-month">Aug</span>
-                                </span>
-                                <div class="event-info">
-                                    <p class="event-title">Sports Day Registration</p>
-                                    <span class="event-time">All Day</span>
+                                    <p class="event-title">No upcoming events</p>
+                                    <span class="event-time">Loading...</span>
                                 </div>
                             </li>
                         </ul>
@@ -464,21 +398,11 @@
                         <a href="#" class="card-link">View All</a>
                     </div>
                     <div class="card-body">
-                        <ul class="notice-list">
-                            <li class="notice-item">
-                                <span class="notice-badge important">Important</span>
-                                <p class="notice-text">School will remain closed on August 15 for Independence Day.</p>
-                                <span class="notice-time">2 hours ago</span>
-                            </li>
+                        <ul class="notice-list" id="noticeList">
                             <li class="notice-item">
                                 <span class="notice-badge info">Info</span>
-                                <p class="notice-text">Mid-term exam schedule has been released. Check the examination module.</p>
-                                <span class="notice-time">1 day ago</span>
-                            </li>
-                            <li class="notice-item">
-                                <span class="notice-badge warning">Warning</span>
-                                <p class="notice-text">Fee deadline for Class 10 is August 20. Late fee applicable after that.</p>
-                                <span class="notice-time">3 days ago</span>
+                                <p class="notice-text">Loading notices...</p>
+                                <span class="notice-time">Just now</span>
                             </li>
                         </ul>
                     </div>
@@ -494,7 +418,198 @@
     </div>
 
     <!-- ===== SCRIPTS ===== -->
+    <!-- Global script (non-module) -->
     <script src="assets/js/script.js"></script>
-    <script src="assets/js/dashboard.js"></script>
+
+    <!-- Firebase Integration Module -->
+    <script type="module">
+        import { auth, database, onAuthStateChanged, signOut, ref, onValue, get, query, orderByChild, limitToLast } from './assets/js/firebase.js';
+
+        // ---------- Authentication Check ----------
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                // Not logged in, redirect to login
+                window.location.href = 'login.html';
+                return;
+            }
+            // User is logged in, load dashboard data
+            loadDashboardData();
+        });
+
+        // ---------- Logout ----------
+        document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                showToast('Logout failed: ' + error.message, 'error');
+            }
+        });
+
+        // ---------- Load Dashboard Data ----------
+        async function loadDashboardData() {
+            try {
+                // Load total students
+                const studentsRef = ref(database, 'students');
+                const studentsSnapshot = await get(studentsRef);
+                const studentsData = studentsSnapshot.val();
+                const totalStudents = studentsData ? Object.keys(studentsData).length : 0;
+                document.getElementById('totalStudents').textContent = totalStudents;
+                document.getElementById('studentChange').textContent = totalStudents > 0 ? 'Active' : 'No students yet';
+
+                // Load total teachers (placeholder - we'll use static for now)
+                // In future, we'll have a teachers node
+                document.getElementById('totalTeachers').textContent = '0';
+                document.getElementById('teacherChange').textContent = 'Setup needed';
+
+                // Load attendance (placeholder)
+                document.getElementById('attendancePercent').textContent = '0%';
+                document.getElementById('attendanceChange').textContent = 'No data';
+
+                // Load fee summary (placeholder)
+                document.getElementById('feeCollected').textContent = '$0';
+                document.getElementById('feeChange').textContent = 'No data';
+
+                // Load recent admissions (latest 4)
+                const admissionsRef = query(ref(database, 'admissions'), orderByChild('timestamp'), limitToLast(4));
+                const admissionsSnapshot = await get(admissionsRef);
+                const admissionsData = admissionsSnapshot.val();
+                const admissionsList = admissionsData ? Object.values(admissionsData).reverse() : [];
+                updateRecentAdmissions(admissionsList);
+
+                // Load recent activities (combine admissions and maybe other events)
+                const activities = admissionsList.map(adm => ({
+                    text: `New student <strong>${adm.studentName || 'Unknown'}</strong> admitted to ${adm.class || 'N/A'}`,
+                    time: adm.timestamp ? timeAgo(adm.timestamp) : 'Just now',
+                    color: 'blue'
+                }));
+                // If no activities, show placeholder
+                if (activities.length === 0) {
+                    activities.push({
+                        text: 'No recent activity',
+                        time: 'Waiting for data',
+                        color: 'gray'
+                    });
+                }
+                updateActivityFeed(activities);
+
+                // Update stats cards with counts from admissions? Not needed, we already have total students.
+
+                // Update fee summary (placeholder, we'll show static)
+                document.getElementById('totalCollected').textContent = '$0';
+                document.getElementById('pendingFees').textContent = '$0';
+                document.getElementById('overdueFees').textContent = '$0';
+                document.getElementById('feeProgressBar').style.width = '0%';
+                document.getElementById('feeProgressLabel').textContent = '0% Collected';
+
+                // Load events and notices (placeholder - we can keep static or load from firebase later)
+                // For now, we keep the static demo content from the original HTML
+                // We'll leave them as is but we can update them via JS if we have data
+
+                // Update chart bars (we'll use random heights for demo)
+                updateChartBars();
+
+                // Show success toast
+                showToast('Dashboard data loaded', 'success');
+
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showToast('Error loading data: ' + error.message, 'error');
+            }
+        }
+
+        // ---------- Update Recent Admissions Table ----------
+        function updateRecentAdmissions(admissions) {
+            const tbody = document.getElementById('recentAdmissionsBody');
+            if (!admissions || admissions.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center">No recent admissions</td></tr>`;
+                return;
+            }
+            let html = '';
+            admissions.forEach(adm => {
+                const statusBadge = adm.status === 'approved' ? 'success' : adm.status === 'pending' ? 'warning' : 'danger';
+                const statusText = adm.status ? adm.status.charAt(0).toUpperCase() + adm.status.slice(1) : 'Pending';
+                const date = adm.timestamp ? new Date(adm.timestamp).toISOString().slice(0,10) : 'N/A';
+                html += `
+                    <tr>
+                        <td><span class="table-avatar">${getInitials(adm.studentName)}</span> ${adm.studentName || 'Unknown'}</td>
+                        <td>${adm.class || 'N/A'}</td>
+                        <td>${date}</td>
+                        <td><span class="badge ${statusBadge}">${statusText}</span></td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // ---------- Update Activity Feed ----------
+        function updateActivityFeed(activities) {
+            const list = document.getElementById('activityList');
+            if (!activities || activities.length === 0) {
+                list.innerHTML = `<li class="activity-item"><span class="activity-dot blue"></span><div class="activity-content"><p class="activity-text">No recent activity</p><span class="activity-time">Just now</span></div></li>`;
+                return;
+            }
+            let html = '';
+            activities.forEach(act => {
+                const color = act.color || 'blue';
+                html += `
+                    <li class="activity-item">
+                        <span class="activity-dot ${color}"></span>
+                        <div class="activity-content">
+                            <p class="activity-text">${act.text}</p>
+                            <span class="activity-time">${act.time}</span>
+                        </div>
+                    </li>
+                `;
+            });
+            list.innerHTML = html;
+        }
+
+        // ---------- Helper: Get Initials ----------
+        function getInitials(name) {
+            if (!name) return '??';
+            const parts = name.trim().split(' ');
+            if (parts.length === 1) return parts[0].substring(0,2).toUpperCase();
+            return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+        }
+
+        // ---------- Helper: Time Ago ----------
+        function timeAgo(timestamp) {
+            const now = Date.now();
+            const diff = now - timestamp;
+            const seconds = Math.floor(diff / 1000);
+            if (seconds < 60) return 'Just now';
+            const minutes = Math.floor(seconds / 60);
+            if (minutes < 60) return minutes + 'm ago';
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return hours + 'h ago';
+            const days = Math.floor(hours / 24);
+            if (days < 7) return days + 'd ago';
+            return new Date(timestamp).toLocaleDateString();
+        }
+
+        // ---------- Update Chart Bars (dummy) ----------
+        function updateChartBars() {
+            const bars = document.querySelectorAll('.chart-bar');
+            const heights = [65, 78, 55, 92, 70, 60, 45]; // dummy data
+            bars.forEach((bar, index) => {
+                if (index < heights.length) {
+                    bar.style.height = heights[index] + '%';
+                }
+            });
+        }
+
+        // ---------- Refresh data on period change (optional) ----------
+        document.getElementById('attendancePeriod')?.addEventListener('change', () => {
+            // reload chart with different data? We'll keep dummy for now.
+            updateChartBars();
+        });
+
+        // We also want to listen for real-time updates for admissions and students to auto-update
+        // but for simplicity, we load once on page load. In production, you might set up listeners.
+        // For Phase 2, this is sufficient.
+
+        console.log('Dashboard module loaded.');
+    </script>
 </body>
 </html>
