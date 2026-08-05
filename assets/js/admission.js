@@ -1,12 +1,11 @@
 /**
- * ADMISSION MODULE – Full Multi-Step Wizard with Firebase Storage
+ * ADMISSION MODULE – Simplified 3-Step Wizard (No Upload)
  * External JavaScript file for admission.html
  */
 
 import {
-    auth, database, ref, push, set, onValue, remove, update,
-    onAuthStateChanged, signOut,
-    storage, storageRef, uploadBytesResumable, getDownloadURL
+    auth, database, ref, push, set, onValue, remove,
+    onAuthStateChanged, signOut
 } from './firebase.js';
 
 // --- Authentication Check ---
@@ -31,22 +30,12 @@ document.getElementById('logoutBtn')?.addEventListener('click', async () => {
 // STATE
 // ============================================================
 let currentStep = 1;
-const totalSteps = 4;
+const totalSteps = 3;
 let allAdmissions = [];
 let filteredAdmissions = [];
 let currentPage = 1;
 const pageSize = 5;
 let deleteTargetId = null;
-let uploadTasks = {};
-
-// Document tracking
-const docFiles = {
-    photo: { file: null, name: '', size: 0, uploaded: false, url: '', progress: 0 },
-    aadhaar: { file: null, name: '', size: 0, uploaded: false, url: '', progress: 0 },
-    fatherAadhaar: { file: null, name: '', size: 0, uploaded: false, url: '', progress: 0 },
-    motherAadhaar: { file: null, name: '', size: 0, uploaded: false, url: '', progress: 0 },
-    apar: { file: null, name: '', size: 0, uploaded: false, url: '', progress: 0 }
-};
 
 // ============================================================
 // DOM REFS
@@ -81,7 +70,9 @@ const confirmFormNumber = document.getElementById('confirmFormNumber');
 const confirmDate = document.getElementById('confirmDate');
 const confirmName = document.getElementById('confirmName');
 const confirmClass = document.getElementById('confirmClass');
-const confirmDocs = document.getElementById('confirmDocs');
+const confirmEmail = document.getElementById('confirmEmail');
+const confirmPhone = document.getElementById('confirmPhone');
+const confirmAddress = document.getElementById('confirmAddress');
 
 // Table
 const tbody = document.getElementById('admissionTableBody');
@@ -129,7 +120,7 @@ function goToStep(step) {
         el.classList.toggle('active', num <= step);
         el.classList.toggle('completed', num < step);
     });
-    if (step === 4) populateConfirmation();
+    if (step === 3) populateConfirmation();
     formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -150,26 +141,10 @@ function validateStep(step) {
             { el: sAddress, msg: 'Address is required' }
         ];
     } else if (step === 2) {
+        // Step 2 has no required fields – optional
         return true;
     } else if (step === 3) {
-        const requiredDocs = ['photo', 'aadhaar', 'fatherAadhaar', 'motherAadhaar'];
-        for (const key of requiredDocs) {
-            if (!docFiles[key].uploaded) {
-                const labelMap = {
-                    photo: 'Student Photo',
-                    aadhaar: 'Student Aadhaar',
-                    fatherAadhaar: "Father's Aadhaar",
-                    motherAadhaar: "Mother's Aadhaar"
-                };
-                showToast(`${labelMap[key]} is required. Please upload the document.`, 'warning');
-                const field = document.querySelector(`[data-doc="${key}"]`)?.closest('.document-field');
-                if (field) {
-                    field.style.borderColor = 'var(--danger)';
-                    setTimeout(() => field.style.borderColor = '', 3000);
-                }
-                return false;
-            }
-        }
+        // Step 3 is confirmation – no validation needed
         return true;
     }
 
@@ -202,148 +177,23 @@ function populateConfirmation() {
     confirmDate.textContent = getTodayDate();
     confirmName.textContent = sName.value.trim() || '—';
     confirmClass.textContent = sClass.value ? `${sClass.value} ${sSection.value || ''}`.trim() : '—';
-    const uploaded = Object.keys(docFiles).filter(k => docFiles[k].uploaded);
-    confirmDocs.textContent = uploaded.length > 0 ? uploaded.length + ' file(s) uploaded' : 'No documents';
+    confirmEmail.textContent = sEmail.value.trim() || '—';
+    confirmPhone.textContent = sPhone.value.trim() || '—';
+    confirmAddress.textContent = sAddress.value.trim() || '—';
 }
 
 // ============================================================
-// FIREBASE STORAGE UPLOAD
-// ============================================================
-async function uploadDocument(docKey, file) {
-    const statusEl = document.querySelector(`[data-doc="${docKey}"]`)?.closest('.file-upload-wrapper')?.querySelector('.file-status');
-    if (!statusEl) return;
-
-    const timestamp = Date.now();
-    const path = `admissions/temp/${timestamp}_${docKey}_${file.name}`;
-    const fileRef = storageRef(storage, path);
-    const uploadTask = uploadBytesResumable(fileRef, file);
-    uploadTasks[docKey] = uploadTask;
-
-    try {
-        statusEl.textContent = '⏳ Uploading...';
-        statusEl.style.color = 'var(--warning)';
-        const snapshot = await uploadTask;
-        const downloadUrl = await getDownloadURL(snapshot.ref);
-        docFiles[docKey].uploaded = true;
-        docFiles[docKey].url = downloadUrl;
-        docFiles[docKey].progress = 100;
-        statusEl.textContent = '✅ Uploaded';
-        statusEl.style.color = 'var(--success)';
-        showToast(`${file.name} uploaded successfully!`, 'success');
-        delete uploadTasks[docKey];
-        return downloadUrl;
-    } catch (error) {
-        console.error('Upload error:', error);
-        statusEl.textContent = '❌ Upload failed';
-        statusEl.style.color = 'var(--danger)';
-        docFiles[docKey].uploaded = false;
-        docFiles[docKey].url = '';
-        showToast(`Upload failed: ${error.message}`, 'error');
-        throw error;
-    }
-}
-
-// ============================================================
-// FILE INPUT HANDLING
-// ============================================================
-function setupFileInputs() {
-    const inputs = document.querySelectorAll('.file-input');
-    inputs.forEach(input => {
-        input.addEventListener('change', async function() {
-            const docKey = this.dataset.doc;
-            const file = this.files[0];
-            if (!file) return;
-
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
-            if (!allowedTypes.includes(file.type)) {
-                showToast('Invalid file type. Please upload JPG, PNG, WEBP, or PDF.', 'error');
-                this.value = '';
-                return;
-            }
-            if (file.size > 2 * 1024 * 1024) {
-                showToast('File size exceeds 2MB limit.', 'error');
-                this.value = '';
-                return;
-            }
-
-            docFiles[docKey] = {
-                file: file,
-                name: file.name,
-                size: file.size,
-                uploaded: false,
-                url: '',
-                progress: 0
-            };
-
-            const wrapper = this.closest('.file-upload-wrapper');
-            const label = wrapper.querySelector('.file-label .file-name');
-            const placeholder = wrapper.querySelector('.file-placeholder');
-            const status = wrapper.querySelector('.file-status');
-            const removeBtn = wrapper.querySelector('.file-remove');
-
-            if (label) label.textContent = file.name;
-            if (placeholder) placeholder.style.display = 'none';
-            if (status) {
-                status.textContent = '📤 Uploading...';
-                status.style.color = 'var(--warning)';
-            }
-            if (removeBtn) removeBtn.style.display = 'inline-block';
-
-            try {
-                await uploadDocument(docKey, file);
-            } catch (error) {
-                this.value = '';
-                if (status) {
-                    status.textContent = '❌ Retry';
-                    status.style.color = 'var(--danger)';
-                }
-            }
-        });
-
-        const removeBtn = input.closest('.file-upload-wrapper')?.querySelector('.file-remove');
-        if (removeBtn) {
-            removeBtn.addEventListener('click', function() {
-                const docKey = input.dataset.doc;
-                if (uploadTasks[docKey]) {
-                    uploadTasks[docKey].cancel();
-                    delete uploadTasks[docKey];
-                }
-                input.value = '';
-                docFiles[docKey] = { file: null, name: '', size: 0, uploaded: false, url: '', progress: 0 };
-                const wrapper = input.closest('.file-upload-wrapper');
-                const label = wrapper.querySelector('.file-label .file-name');
-                const placeholder = wrapper.querySelector('.file-placeholder');
-                const status = wrapper.querySelector('.file-status');
-                if (label) label.textContent = '';
-                if (placeholder) placeholder.style.display = 'inline';
-                if (status) { status.textContent = ''; status.style.color = ''; }
-                this.style.display = 'none';
-                showToast('File removed', 'info');
-            });
-        }
-    });
-}
-
-// ============================================================
-// FORM SUBMISSION
+// FORM SUBMISSION (No Uploads)
 // ============================================================
 form.addEventListener('submit', async function(e) {
     e.preventDefault();
 
+    // Double-check required fields
     const name = sName.value.trim();
     if (!name) {
-        showToast('Please complete all required fields in previous steps.', 'warning');
+        showToast('Please complete all required fields in Step 1.', 'warning');
         goToStep(1);
         return;
-    }
-
-    const requiredDocs = ['photo', 'aadhaar', 'fatherAadhaar', 'motherAadhaar'];
-    for (const key of requiredDocs) {
-        if (!docFiles[key].uploaded) {
-            showToast('Please upload all required documents.', 'warning');
-            goToStep(3);
-            return;
-        }
     }
 
     const data = {
@@ -363,20 +213,9 @@ form.addEventListener('submit', async function(e) {
         prevYear: prevYear.value || '',
         prevGrade: prevGrade.value || '',
         status: 'pending',
-        documents: {},
         createdAt: Date.now(),
         updatedAt: Date.now()
     };
-
-    for (const [key, val] of Object.entries(docFiles)) {
-        if (val.uploaded && val.url) {
-            data.documents[key] = {
-                name: val.name,
-                size: val.size,
-                url: val.url
-            };
-        }
-    }
 
     finalSubmitBtn.disabled = true;
     finalSubmitBtn.querySelector('.spinner').style.display = 'inline-block';
@@ -396,7 +235,7 @@ form.addEventListener('submit', async function(e) {
     } finally {
         finalSubmitBtn.disabled = false;
         finalSubmitBtn.querySelector('.spinner').style.display = 'none';
-        finalSubmitBtn.querySelector('.btn-text').textContent = 'Final Submit';
+        finalSubmitBtn.querySelector('.btn-text').textContent = 'Submit Admission';
     }
 });
 
@@ -405,25 +244,8 @@ form.addEventListener('submit', async function(e) {
 // ============================================================
 function resetForm() {
     form.reset();
-    document.querySelectorAll('.file-input').forEach(input => {
-        input.value = '';
-        const wrapper = input.closest('.file-upload-wrapper');
-        const label = wrapper?.querySelector('.file-label .file-name');
-        const placeholder = wrapper?.querySelector('.file-placeholder');
-        const status = wrapper?.querySelector('.file-status');
-        const removeBtn = wrapper?.querySelector('.file-remove');
-        if (label) label.textContent = '';
-        if (placeholder) placeholder.style.display = 'inline';
-        if (status) { status.textContent = ''; status.style.color = ''; }
-        if (removeBtn) removeBtn.style.display = 'none';
-    });
-    Object.keys(docFiles).forEach(k => {
-        docFiles[k] = { file: null, name: '', size: 0, uploaded: false, url: '', progress: 0 };
-    });
-    for (const task of Object.values(uploadTasks)) {
-        if (task && task.cancel) task.cancel();
-    }
-    uploadTasks = {};
+    // Remove invalid class from all fields
+    document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
     currentStep = 1;
     goToStep(1);
 }
@@ -615,11 +437,8 @@ if (sidebarToggle && sidebar) {
     });
 }
 
-// Setup file inputs
-setupFileInputs();
-
 // Initial state: show list, hide form
 formCard.style.display = 'none';
 document.getElementById('admissionListContainer').style.display = 'block';
 
-console.log('Admission Module (external JS) loaded.');
+console.log('Admission Module (simplified 3-step) loaded.');
