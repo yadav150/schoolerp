@@ -19,6 +19,12 @@ import {
     update, 
     get 
 } from "firebase/database";
+import { 
+    getStorage, 
+    ref as storageRef, 
+    uploadBytes, 
+    getDownloadURL 
+} from "firebase/storage";
 
 // Your Firebase configuration (from provided details)
 const firebaseConfig = {
@@ -35,12 +41,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app);
+const storage = getStorage(app);
 
 // Export everything needed across the application
 export {
     app,
     auth,
     database,
+    storage,
     onAuthStateChanged,
     signInWithEmailAndPassword,
     signOut,
@@ -50,5 +58,8 @@ export {
     onValue,
     remove,
     update,
-    get
+    get,
+    storageRef,
+    uploadBytes,
+    getDownloadURL
 };
