@@ -1,4 +1,4 @@
-/* ===== Universal Styles for EduERP ===== */
+/* ===== Universal Styles for EduERP (Dashboard included) ===== */
 :root {
     --font: 'Inter', sans-serif;
     --sidebar-w: 260px;
@@ -42,9 +42,7 @@ body {
     display: flex;
     flex-direction: column;
     position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
+    top: 0; left: 0; bottom: 0;
     z-index: 100;
     transition: transform var(--transition);
     transform: translateX(0);
@@ -279,27 +277,88 @@ body {
     to { transform: translateX(0); opacity: 1; }
 }
 
+/* ===== Dashboard Specific (now part of universal) ===== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: box-shadow 0.2s;
+}
+.stat-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.stat-icon-blue { background: #EFF6FF; color: var(--primary); }
+.stat-icon-green { background: #ECFDF5; color: var(--success); }
+.stat-icon-purple { background: #F5F3FF; color: #8B5CF6; }
+.stat-icon-orange { background: #FFF7ED; color: #F97316; }
+
+.stat-info { flex: 1; }
+.stat-label { display: block; font-size: 0.8rem; color: var(--text-light); font-weight: 500; }
+.stat-value { display: block; font-size: 1.5rem; font-weight: 700; color: var(--text); }
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+}
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: white;
+    transition: opacity 0.2s;
+}
+.action-btn:hover { opacity: 0.9; }
+.action-btn-blue { background: var(--primary); }
+.action-btn-green { background: var(--success); }
+.action-btn-purple { background: #8B5CF6; }
+.action-btn-orange { background: #F97316; }
+
 /* ===== Responsive ===== */
 @media (max-width: 1024px) {
-    .sidebar {
-        transform: translateX(-100%);
-    }
-    .sidebar.open {
-        transform: translateX(0);
-    }
-    .sidebar-overlay.active {
-        display: block;
-    }
-    .mobile-header {
-        display: flex;
-    }
-    .main-content {
-        margin-left: 0;
-        width: 100%;
-    }
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-overlay.active { display: block; }
+    .mobile-header { display: flex; }
+    .main-content { margin-left: 0; width: 100%; }
 }
+
+@media (max-width: 900px) {
+    .dashboard-grid { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 640px) {
-    .main-content {
-        padding: 1rem;
-    }
+    .main-content { padding: 1rem; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .quick-actions { grid-template-columns: 1fr; }
 }
