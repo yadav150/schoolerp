@@ -20,18 +20,76 @@
 </head>
 <body>
 
-    <!-- ===== SIDEBAR (unchanged – keep as before) ===== -->
+    <!-- ===== SIDEBAR (unchanged) ===== -->
     <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main Navigation">
-        <!-- ... same sidebar content as previous version ... -->
-        <!-- To keep the response concise, we assume the sidebar is exactly as before. -->
-        <!-- In practice, you would copy the full sidebar from the previous admission.html -->
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="2" width="32" height="32" rx="8" fill="#2563EB" />
+                    <path d="M10 18L15 23L26 12" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M10 26L15 31L26 20" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.6" />
+                </svg>
+            </div>
+            <span class="brand-name">SchoolERP</span>
+        </div>
+        <nav class="sidebar-nav">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="../../dashboard.html" class="nav-link"><svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Dashboard</span></a></li>
+                <li class="nav-item active"><a href="admission.html" class="nav-link"><svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg><span>Admission</span></a></li>
+                <li class="nav-item"><a href="../students/students.html" class="nav-link"><svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Students</span></a></li>
+                <li class="nav-item"><a href="../teachers/teachers.html" class="nav-link"><svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg><span>Teachers</span></a></li>
+                <li class="nav-item"><a href="../attendance/attendance.html" class="nav-link"><svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>Attendance</span></a></li>
+                <li class="nav-item"><a href="../examination/examination.html" class="nav-link"><svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>Examination</span></a></li>
+                <li class="nav-item"><a href="../fees/fees.html" class="nav-link"><svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg><span>Fee Collection</span></a></li>
+                <li class="nav-item"><a href="../library/library.html" class="nav-link"><svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>Library</span></a></li>
+                <li class="nav-item"><a href="../transport/transport.html" class="nav-link"><svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><polyline points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18" r="2.5"/><circle cx="18.5" cy="18" r="2.5"/></svg><span>Transport</span></a></li>
+                <li class="nav-item"><a href="../hostel/hostel.html" class="nav-link"><svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Hostel</span></a></li>
+                <li class="nav-item"><a href="../inventory/inventory.html" class="nav-link"><svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>Inventory</span></a></li>
+                <li class="nav-item"><a href="../payroll/payroll.html" class="nav-link"><svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>Payroll</span></a></li>
+                <li class="nav-item"><a href="../accounts/accounts.html" class="nav-link"><svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>Accounts</span></a></li>
+                <li class="nav-item"><a href="../reports/reports.html" class="nav-link"><svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg><span>Reports</span></a></li>
+                <li class="nav-item"><a href="../settings/settings.html" class="nav-link"><svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-mini">
+                <div class="user-avatar">AD</div>
+                <div class="user-info">
+                    <span class="user-name">Admin User</span>
+                    <span class="user-role">Administrator</span>
+                </div>
+            </div>
+        </div>
     </aside>
 
     <!-- ===== MAIN WRAPPER ===== -->
     <div class="main-wrapper">
-        <!-- Header (unchanged) -->
+        <!-- Header -->
         <header class="main-header">
-            <!-- ... same header ... -->
+            <div class="header-left">
+                <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <div class="breadcrumb">
+                    <span class="breadcrumb-item">Admission</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="header-search">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" placeholder="Search..." aria-label="Search" id="admissionSearch" />
+                </div>
+                <button class="header-btn" aria-label="Notifications">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <span class="badge-dot">3</span>
+                </button>
+                <button class="header-btn" aria-label="Messages">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </button>
+                <button class="header-btn" id="logoutBtn" aria-label="Logout" title="Logout">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </button>
+            </div>
         </header>
 
         <!-- Page Content -->
@@ -394,662 +452,8 @@
     <!-- ===== GLOBAL SCRIPTS ===== -->
     <script src="../../assets/js/script.js"></script>
 
-    <!-- ===== ADMISSION MODULE SCRIPT ===== -->
-    <script type="module">
-        // ============================================================
-        // ADMISSION MODULE – Multi-Step Wizard with Firebase Storage
-        // ============================================================
+    <!-- ===== ADMISSION MODULE EXTERNAL SCRIPT ===== -->
+    <script type="module" src="../../assets/js/admission.js"></script>
 
-        import {
-            auth, database, ref, push, set, onValue, remove, update,
-            onAuthStateChanged, signOut,
-            storage, storageRef, uploadBytesResumable, getDownloadURL
-        } from '../../assets/js/firebase.js';
-
-        // --- Authentication (unchanged) ---
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                window.location.href = '../../login.html';
-                return;
-            }
-            loadAdmissions();
-        });
-
-        document.getElementById('logoutBtn')?.addEventListener('click', async () => {
-            try {
-                await signOut(auth);
-                window.location.href = '../../login.html';
-            } catch (e) {
-                showToast('Logout failed: ' + e.message, 'error');
-            }
-        });
-
-        // ============================================================
-        // STATE
-        // ============================================================
-        let currentStep = 1;
-        const totalSteps = 4;
-        let allAdmissions = [];
-        let filteredAdmissions = [];
-        let currentPage = 1;
-        const pageSize = 5;
-        let deleteTargetId = null;
-        let uploadTasks = {}; // track upload tasks per doc key
-
-        // Document tracking: { docKey: { file, name, size, uploaded: false, url: '', progress: 0 } }
-        const docFiles = {
-            photo: { file: null, name: '', size: 0, uploaded: false, url: '', progress: 0 },
-            aadhaar: { file: null, name: '', size: 0, uploaded: false, url: '', progress: 0 },
-            fatherAadhaar: { file: null, name: '', size: 0, uploaded: false, url: '', progress: 0 },
-            motherAadhaar: { file: null, name: '', size: 0, uploaded: false, url: '', progress: 0 },
-            apar: { file: null, name: '', size: 0, uploaded: false, url: '', progress: 0 }
-        };
-
-        // ============================================================
-        // DOM REFS (same as before)
-        // ============================================================
-        const formCard = document.getElementById('admissionFormCard');
-        const newBtn = document.getElementById('newAdmissionBtn');
-        const steps = document.querySelectorAll('.form-step');
-        const progressBar = document.getElementById('progressBar');
-        const progressSteps = document.querySelectorAll('.step-progress-step');
-        const form = document.getElementById('admissionForm');
-        const finalSubmitBtn = document.getElementById('finalSubmitBtn');
-
-        // Step 1 fields
-        const sName = document.getElementById('studentName');
-        const sDOB = document.getElementById('studentDOB');
-        const sGender = document.getElementById('studentGender');
-        const sClass = document.getElementById('studentClass');
-        const sSection = document.getElementById('studentSection');
-        const sPhone = document.getElementById('studentPhone');
-        const sEmail = document.getElementById('studentEmail');
-        const sAddress = document.getElementById('studentAddress');
-
-        // Step 2 fields
-        const prevSchool = document.getElementById('prevSchool');
-        const prevClass = document.getElementById('prevClass');
-        const prevYear = document.getElementById('prevYear');
-        const prevGrade = document.getElementById('prevGrade');
-
-        // Confirmation fields
-        const confirmStudentId = document.getElementById('confirmStudentId');
-        const confirmFormNumber = document.getElementById('confirmFormNumber');
-        const confirmDate = document.getElementById('confirmDate');
-        const confirmName = document.getElementById('confirmName');
-        const confirmClass = document.getElementById('confirmClass');
-        const confirmDocs = document.getElementById('confirmDocs');
-
-        // Table
-        const tbody = document.getElementById('admissionTableBody');
-        const countSpan = document.getElementById('admissionCount');
-
-        // ============================================================
-        // UTILITY FUNCTIONS
-        // ============================================================
-        function generateStudentId() {
-            const year = new Date().getFullYear();
-            const rand = String(Math.floor(1000 + Math.random() * 9000));
-            return `STU-${year}-${rand}`;
-        }
-
-        function generateFormNumber() {
-            const year = new Date().getFullYear();
-            const rand = String(Math.floor(1000 + Math.random() * 9000));
-            return `ADM-${year}-${rand}`;
-        }
-
-        function getTodayDate() {
-            return new Date().toISOString().split('T')[0];
-        }
-
-        function getInitials(name) {
-            if (!name) return '??';
-            const parts = name.trim().split(' ');
-            if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
-            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-        }
-
-        // ============================================================
-        // STEP NAVIGATION (unchanged)
-        // ============================================================
-        function goToStep(step) {
-            if (step < 1 || step > totalSteps) return;
-            currentStep = step;
-            steps.forEach(el => {
-                el.style.display = el.dataset.step == step ? 'block' : 'none';
-            });
-            const pct = ((step - 1) / (totalSteps - 1)) * 100;
-            progressBar.style.width = pct + '%';
-            progressSteps.forEach(el => {
-                const num = parseInt(el.dataset.step);
-                el.classList.toggle('active', num <= step);
-                el.classList.toggle('completed', num < step);
-            });
-            if (step === 4) populateConfirmation();
-            formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        // ============================================================
-        // VALIDATION (unchanged)
-        // ============================================================
-        function validateStep(step) {
-            let fields = [];
-            let firstInvalid = null;
-
-            if (step === 1) {
-                fields = [
-                    { el: sName, msg: 'Full name is required' },
-                    { el: sDOB, msg: 'Date of birth is required' },
-                    { el: sGender, msg: 'Please select gender' },
-                    { el: sClass, msg: 'Please select class' },
-                    { el: sPhone, msg: 'Phone number is required' },
-                    { el: sAddress, msg: 'Address is required' }
-                ];
-            } else if (step === 2) {
-                return true;
-            } else if (step === 3) {
-                const requiredDocs = ['photo', 'aadhaar', 'fatherAadhaar', 'motherAadhaar'];
-                for (const key of requiredDocs) {
-                    if (!docFiles[key].uploaded) {
-                        const labelMap = {
-                            photo: 'Student Photo',
-                            aadhaar: 'Student Aadhaar',
-                            fatherAadhaar: "Father's Aadhaar",
-                            motherAadhaar: "Mother's Aadhaar"
-                        };
-                        showToast(`${labelMap[key]} is required. Please upload the document.`, 'warning');
-                        const field = document.querySelector(`[data-doc="${key}"]`)?.closest('.document-field');
-                        if (field) {
-                            field.style.borderColor = 'var(--danger)';
-                            setTimeout(() => field.style.borderColor = '', 3000);
-                        }
-                        return false;
-                    }
-                }
-                return true;
-            }
-
-            for (const f of fields) {
-                const val = f.el.value.trim();
-                if (!val) {
-                    f.el.classList.add('is-invalid');
-                    if (!firstInvalid) firstInvalid = f.el;
-                } else {
-                    f.el.classList.remove('is-invalid');
-                }
-            }
-            const invalid = fields.some(f => !f.el.value.trim());
-            if (invalid && firstInvalid) {
-                const label = firstInvalid.closest('.form-group')?.querySelector('.form-label')?.textContent || 'Field';
-                showToast(`Please fill in: ${label}`, 'warning');
-                firstInvalid.focus();
-                firstInvalid.scrollIntoView({ block: 'center', behavior: 'smooth' });
-                return false;
-            }
-            return true;
-        }
-
-        // ============================================================
-        // CONFIRMATION POPULATION
-        // ============================================================
-        function populateConfirmation() {
-            confirmStudentId.textContent = generateStudentId();
-            confirmFormNumber.textContent = generateFormNumber();
-            confirmDate.textContent = getTodayDate();
-            confirmName.textContent = sName.value.trim() || '—';
-            confirmClass.textContent = sClass.value ? `${sClass.value} ${sSection.value || ''}`.trim() : '—';
-            const uploaded = Object.keys(docFiles).filter(k => docFiles[k].uploaded);
-            confirmDocs.textContent = uploaded.length > 0 ? uploaded.length + ' file(s) uploaded' : 'No documents';
-        }
-
-        // ============================================================
-        // FIREBASE STORAGE UPLOAD
-        // ============================================================
-        async function uploadDocument(docKey, file) {
-            const statusEl = document.querySelector(`[data-doc="${docKey}"]`)?.closest('.file-upload-wrapper')?.querySelector('.file-status');
-            if (!statusEl) return;
-
-            // Create a unique path: admissions/documents/{studentId}/{docKey}_{timestamp}
-            // Since studentId is not yet generated, we use a temporary timestamp-based path
-            const timestamp = Date.now();
-            const path = `admissions/temp/${timestamp}_${docKey}_${file.name}`;
-            const fileRef = storageRef(storage, path);
-            const uploadTask = uploadBytesResumable(fileRef, file);
-
-            // Store the task reference so we can cancel if needed (optional)
-            uploadTasks[docKey] = uploadTask;
-
-            try {
-                // Update status: uploading
-                statusEl.textContent = '⏳ Uploading...';
-                statusEl.style.color = 'var(--warning)';
-
-                // Wait for upload to complete
-                const snapshot = await uploadTask;
-                const downloadUrl = await getDownloadURL(snapshot.ref);
-
-                // Update docFiles
-                docFiles[docKey].uploaded = true;
-                docFiles[docKey].url = downloadUrl;
-                docFiles[docKey].progress = 100;
-
-                // Update UI
-                statusEl.textContent = '✅ Uploaded';
-                statusEl.style.color = 'var(--success)';
-                showToast(`${file.name} uploaded successfully!`, 'success');
-
-                // Remove the temporary reference
-                delete uploadTasks[docKey];
-
-                return downloadUrl;
-            } catch (error) {
-                console.error('Upload error:', error);
-                statusEl.textContent = '❌ Upload failed';
-                statusEl.style.color = 'var(--danger)';
-                docFiles[docKey].uploaded = false;
-                docFiles[docKey].url = '';
-                showToast(`Upload failed: ${error.message}`, 'error');
-                throw error;
-            }
-        }
-
-        // ============================================================
-        // FILE INPUT HANDLING (with real upload)
-        // ============================================================
-        function setupFileInputs() {
-            const inputs = document.querySelectorAll('.file-input');
-            inputs.forEach(input => {
-                input.addEventListener('change', async function() {
-                    const docKey = this.dataset.doc;
-                    const file = this.files[0];
-                    if (!file) return;
-
-                    // Validate file type
-                    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
-                    if (!allowedTypes.includes(file.type)) {
-                        showToast('Invalid file type. Please upload JPG, PNG, WEBP, or PDF.', 'error');
-                        this.value = '';
-                        return;
-                    }
-
-                    // Validate size (2MB)
-                    if (file.size > 2 * 1024 * 1024) {
-                        showToast('File size exceeds 2MB limit.', 'error');
-                        this.value = '';
-                        return;
-                    }
-
-                    // Store file reference
-                    docFiles[docKey] = {
-                        file: file,
-                        name: file.name,
-                        size: file.size,
-                        uploaded: false,
-                        url: '',
-                        progress: 0
-                    };
-
-                    // Update UI
-                    const wrapper = this.closest('.file-upload-wrapper');
-                    const label = wrapper.querySelector('.file-label .file-name');
-                    const placeholder = wrapper.querySelector('.file-placeholder');
-                    const status = wrapper.querySelector('.file-status');
-                    const removeBtn = wrapper.querySelector('.file-remove');
-
-                    if (label) label.textContent = file.name;
-                    if (placeholder) placeholder.style.display = 'none';
-                    if (status) {
-                        status.textContent = '📤 Uploading...';
-                        status.style.color = 'var(--warning)';
-                    }
-                    if (removeBtn) removeBtn.style.display = 'inline-block';
-
-                    // Actually upload to Firebase Storage
-                    try {
-                        await uploadDocument(docKey, file);
-                    } catch (error) {
-                        // Error already handled in uploadDocument
-                        // Reset the file input so user can retry
-                        this.value = '';
-                        if (status) {
-                            status.textContent = '❌ Retry';
-                            status.style.color = 'var(--danger)';
-                        }
-                    }
-                });
-
-                // Remove button logic
-                const removeBtn = input.closest('.file-upload-wrapper')?.querySelector('.file-remove');
-                if (removeBtn) {
-                    removeBtn.addEventListener('click', function() {
-                        const docKey = input.dataset.doc;
-                        // Cancel any ongoing upload
-                        if (uploadTasks[docKey]) {
-                            uploadTasks[docKey].cancel();
-                            delete uploadTasks[docKey];
-                        }
-                        input.value = '';
-                        docFiles[docKey] = { file: null, name: '', size: 0, uploaded: false, url: '', progress: 0 };
-                        const wrapper = input.closest('.file-upload-wrapper');
-                        const label = wrapper.querySelector('.file-label .file-name');
-                        const placeholder = wrapper.querySelector('.file-placeholder');
-                        const status = wrapper.querySelector('.file-status');
-                        if (label) label.textContent = '';
-                        if (placeholder) placeholder.style.display = 'inline';
-                        if (status) { status.textContent = ''; status.style.color = ''; }
-                        this.style.display = 'none';
-                        showToast('File removed', 'info');
-                    });
-                }
-            });
-        }
-
-        // ============================================================
-        // FORM SUBMISSION
-        // ============================================================
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            // Validate step 4 (double-check)
-            const name = sName.value.trim();
-            if (!name) {
-                showToast('Please complete all required fields in previous steps.', 'warning');
-                goToStep(1);
-                return;
-            }
-
-            // Ensure all required documents are uploaded
-            const requiredDocs = ['photo', 'aadhaar', 'fatherAadhaar', 'motherAadhaar'];
-            for (const key of requiredDocs) {
-                if (!docFiles[key].uploaded) {
-                    showToast('Please upload all required documents.', 'warning');
-                    goToStep(3);
-                    return;
-                }
-            }
-
-            // Build data
-            const data = {
-                studentId: generateStudentId(),
-                formNumber: generateFormNumber(),
-                date: getTodayDate(),
-                studentName: name,
-                dob: sDOB.value || '',
-                gender: sGender.value || '',
-                class: sClass.value || '',
-                section: sSection.value || '',
-                phone: sPhone.value || '',
-                email: sEmail.value || '',
-                address: sAddress.value || '',
-                prevSchool: prevSchool.value || '',
-                prevClass: prevClass.value || '',
-                prevYear: prevYear.value || '',
-                prevGrade: prevGrade.value || '',
-                status: 'pending',
-                documents: {},
-                createdAt: Date.now(),
-                updatedAt: Date.now()
-            };
-
-            // Add document URLs
-            for (const [key, val] of Object.entries(docFiles)) {
-                if (val.uploaded && val.url) {
-                    data.documents[key] = {
-                        name: val.name,
-                        size: val.size,
-                        url: val.url
-                    };
-                }
-            }
-
-            // Show loading
-            finalSubmitBtn.disabled = true;
-            finalSubmitBtn.querySelector('.spinner').style.display = 'inline-block';
-            finalSubmitBtn.querySelector('.btn-text').textContent = 'Submitting...';
-
-            try {
-                const newRef = push(ref(database, 'admissions'));
-                await set(newRef, data);
-                showToast('Admission submitted successfully! ✅', 'success');
-                resetForm();
-                goToStep(1);
-                loadAdmissions();
-                formCard.style.display = 'none';
-                document.getElementById('admissionListContainer').style.display = 'block';
-            } catch (error) {
-                showToast('Error: ' + error.message, 'error');
-            } finally {
-                finalSubmitBtn.disabled = false;
-                finalSubmitBtn.querySelector('.spinner').style.display = 'none';
-                finalSubmitBtn.querySelector('.btn-text').textContent = 'Final Submit';
-            }
-        });
-
-        // ============================================================
-        // RESET FORM
-        // ============================================================
-        function resetForm() {
-            form.reset();
-            document.querySelectorAll('.file-input').forEach(input => {
-                input.value = '';
-                const wrapper = input.closest('.file-upload-wrapper');
-                const label = wrapper?.querySelector('.file-label .file-name');
-                const placeholder = wrapper?.querySelector('.file-placeholder');
-                const status = wrapper?.querySelector('.file-status');
-                const removeBtn = wrapper?.querySelector('.file-remove');
-                if (label) label.textContent = '';
-                if (placeholder) placeholder.style.display = 'inline';
-                if (status) { status.textContent = ''; status.style.color = ''; }
-                if (removeBtn) removeBtn.style.display = 'none';
-            });
-            Object.keys(docFiles).forEach(k => {
-                docFiles[k] = { file: null, name: '', size: 0, uploaded: false, url: '', progress: 0 };
-            });
-            // Cancel any ongoing uploads
-            for (const task of Object.values(uploadTasks)) {
-                if (task && task.cancel) task.cancel();
-            }
-            uploadTasks = {};
-            currentStep = 1;
-            goToStep(1);
-        }
-
-        // ============================================================
-        // LOAD ADMISSIONS (unchanged)
-        // ============================================================
-        function loadAdmissions() {
-            const admissionsRef = ref(database, 'admissions');
-            onValue(admissionsRef, (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    allAdmissions = Object.keys(data).map(key => ({
-                        id: key,
-                        ...data[key]
-                    }));
-                    allAdmissions.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                } else {
-                    allAdmissions = [];
-                }
-                applyFiltersAndRender();
-            }, (error) => {
-                showToast('Error loading admissions: ' + error.message, 'error');
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center">Error loading data</td></tr>`;
-            });
-        }
-
-        // ============================================================
-        // FILTER & RENDER (unchanged)
-        // ============================================================
-        function applyFiltersAndRender() {
-            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
-            const classFilter = document.getElementById('filterClass').value;
-            const statusFilter = document.getElementById('filterStatus').value;
-
-            filteredAdmissions = allAdmissions.filter(adm => {
-                const nameMatch = adm.studentName?.toLowerCase().includes(searchTerm) || false;
-                const idMatch = adm.studentId?.toLowerCase().includes(searchTerm) || false;
-                const searchMatch = nameMatch || idMatch;
-                const classMatch = classFilter ? adm.class === classFilter : true;
-                const statusMatch = statusFilter ? adm.status === statusFilter : true;
-                return searchMatch && classMatch && statusMatch;
-            });
-
-            currentPage = 1;
-            renderTable();
-        }
-
-        function renderTable() {
-            const start = (currentPage - 1) * pageSize;
-            const end = start + pageSize;
-            const pageData = filteredAdmissions.slice(start, end);
-
-            if (pageData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center">No admissions found</td></tr>`;
-                countSpan.textContent = 'Showing 0 entries';
-                return;
-            }
-
-            let html = '';
-            pageData.forEach(adm => {
-                const statusBadge = adm.status === 'approved' ? 'success' : adm.status === 'pending' ? 'warning' : 'danger';
-                const statusText = adm.status ? adm.status.charAt(0).toUpperCase() + adm.status.slice(1) : 'Pending';
-                const date = adm.date || (adm.createdAt ? new Date(adm.createdAt).toLocaleDateString() : 'N/A');
-                const initials = getInitials(adm.studentName);
-                html += `
-                    <tr>
-                        <td><strong>${adm.studentId || 'N/A'}</strong></td>
-                        <td><span class="table-avatar">${initials}</span> ${adm.studentName || 'Unknown'}</td>
-                        <td>${adm.class || 'N/A'} ${adm.section || ''}</td>
-                        <td>${date}</td>
-                        <td><span class="badge ${statusBadge}">${statusText}</span></td>
-                        <td>
-                            <button class="btn btn-outline-primary btn-sm view-btn" data-id="${adm.id}">View</button>
-                            <button class="btn btn-danger btn-sm delete-btn" data-id="${adm.id}">Delete</button>
-                        </td>
-                    </tr>
-                `;
-            });
-            tbody.innerHTML = html;
-
-            const total = filteredAdmissions.length;
-            const totalPages = Math.ceil(total / pageSize) || 1;
-            countSpan.textContent = `Showing ${start+1}-${Math.min(end, total)} of ${total} entries`;
-            document.getElementById('page1').textContent = currentPage;
-            document.getElementById('prevPage').disabled = currentPage === 1;
-            document.getElementById('nextPage').disabled = currentPage >= totalPages;
-
-            document.querySelectorAll('.view-btn').forEach(btn => {
-                btn.addEventListener('click', () => viewAdmission(btn.dataset.id));
-            });
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', () => confirmDelete(btn.dataset.id));
-            });
-        }
-
-        function viewAdmission(id) {
-            showToast('View details feature coming soon.', 'info');
-        }
-
-        // ============================================================
-        // DELETE (unchanged)
-        // ============================================================
-        function confirmDelete(id) {
-            deleteTargetId = id;
-            document.getElementById('confirmModal').classList.add('active');
-        }
-
-        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
-            if (!deleteTargetId) return;
-            try {
-                await remove(ref(database, `admissions/${deleteTargetId}`));
-                showToast('Admission deleted successfully', 'success');
-            } catch (error) {
-                showToast('Error deleting: ' + error.message, 'error');
-            } finally {
-                document.getElementById('confirmModal').classList.remove('active');
-                deleteTargetId = null;
-            }
-        });
-
-        function closeConfirmModal() {
-            document.getElementById('confirmModal').classList.remove('active');
-            deleteTargetId = null;
-        }
-
-        document.getElementById('cancelConfirmBtn').addEventListener('click', closeConfirmModal);
-        document.getElementById('closeConfirmModal').addEventListener('click', closeConfirmModal);
-        document.getElementById('confirmModal').addEventListener('click', function(e) {
-            if (e.target === this) closeConfirmModal();
-        });
-
-        // ============================================================
-        // EVENT BINDINGS
-        // ============================================================
-        newBtn.addEventListener('click', () => {
-            resetForm();
-            formCard.style.display = 'block';
-            document.getElementById('admissionListContainer').style.display = 'none';
-            goToStep(1);
-            sName.focus();
-        });
-
-        document.querySelectorAll('.step-next').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const nextStep = parseInt(this.dataset.next);
-                const currentStepNum = parseInt(this.closest('.form-step').dataset.step);
-                if (validateStep(currentStepNum)) {
-                    goToStep(nextStep);
-                }
-            });
-        });
-
-        document.querySelectorAll('.step-prev').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const prevStep = parseInt(this.dataset.prev);
-                goToStep(prevStep);
-            });
-        });
-
-        document.getElementById('applyFilterBtn').addEventListener('click', applyFiltersAndRender);
-        document.getElementById('resetFilterBtn').addEventListener('click', function() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('filterClass').value = '';
-            document.getElementById('filterStatus').value = '';
-            applyFiltersAndRender();
-        });
-        document.getElementById('searchInput').addEventListener('keyup', (e) => {
-            if (e.key === 'Enter') applyFiltersAndRender();
-        });
-
-        document.getElementById('prevPage').addEventListener('click', () => {
-            if (currentPage > 1) { currentPage--; renderTable(); }
-        });
-        document.getElementById('nextPage').addEventListener('click', () => {
-            const totalPages = Math.ceil(filteredAdmissions.length / pageSize);
-            if (currentPage < totalPages) { currentPage++; renderTable(); }
-        });
-
-        // Sidebar toggle
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        if (sidebarToggle && sidebar) {
-            sidebarToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
-            document.addEventListener('click', (e) => {
-                if (window.innerWidth <= 1024 && sidebar && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
-                    sidebar.classList.remove('open');
-                }
-            });
-        }
-
-        // Setup file inputs (with real upload)
-        setupFileInputs();
-
-        // Initial state: show list, hide form
-        formCard.style.display = 'none';
-        document.getElementById('admissionListContainer').style.display = 'block';
-
-        console.log('Admission Module (with Firebase Storage upload) loaded.');
-    </script>
 </body>
 </html>
