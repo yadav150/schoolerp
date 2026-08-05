@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>School ERP | Admission</title>
+    <title>School ERP | Students</title>
     <link rel="stylesheet" href="../../assets/css/style.css" />
-    <link rel="stylesheet" href="../../assets/css/admission.css" />
-    <!-- Import Map for Firebase SDK (Storage removed) -->
+    <link rel="stylesheet" href="../../assets/css/students.css" />
+    <!-- Import Map for Firebase Modular SDK -->
     <script type="importmap">
         {
             "imports": {
@@ -23,7 +23,7 @@
     <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main Navigation">
         <!-- ... same sidebar as before ... -->
         <!-- To keep the response concise, we assume the sidebar is exactly as before. -->
-        <!-- In practice, you would copy the full sidebar from the previous admission.html -->
+        <!-- In practice, you would copy the full sidebar from the previous students.html -->
         <!-- For brevity, we omit it here; the actual file should include it. -->
     </aside>
 
@@ -36,253 +36,90 @@
 
         <!-- Page Content -->
         <main class="page-content">
-
             <!-- Page Header -->
             <div class="page-header">
-                <h1 class="page-title">Student Admission</h1>
+                <h1 class="page-title">Student Records</h1>
                 <div class="page-actions">
-                    <button class="btn btn-primary" id="newAdmissionBtn">
+                    <button class="btn btn-primary" id="openStudentModalBtn">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-                        New Admission
+                        Add Student
+                    </button>
+                    <button class="btn btn-outline-primary" id="exportBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Export
                     </button>
                 </div>
             </div>
 
-            <!-- ============================================================ -->
-            <!-- ADMISSION FORM – 3-STEP WIZARD (Supports Add & Edit)          -->
-            <!-- ============================================================ -->
-            <div class="card" id="admissionFormCard" style="display:none;">
-                <div class="card-body">
-
-                    <!-- Progress Bar -->
-                    <div class="step-progress" id="stepProgress">
-                        <div class="step-progress-bar" id="progressBar" style="width:0%;"></div>
-                        <div class="step-progress-steps">
-                            <div class="step-progress-step active" data-step="1">
-                                <span class="step-number">1</span>
-                                <span class="step-label">Personal</span>
-                            </div>
-                            <div class="step-progress-step" data-step="2">
-                                <span class="step-number">2</span>
-                                <span class="step-label">Education</span>
-                            </div>
-                            <div class="step-progress-step" data-step="3">
-                                <span class="step-number">3</span>
-                                <span class="step-label">Confirm</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <form id="admissionForm" novalidate>
-                        <!-- Hidden field for edit mode -->
-                        <input type="hidden" id="editAdmissionId" />
-
-                        <!-- ===== STEP 1: PERSONAL DETAILS ===== -->
-                        <div class="form-step" data-step="1">
-                            <h3 class="step-title">Personal Details</h3>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label" for="studentName">Full Name <span class="required">*</span></label>
-                                    <input type="text" id="studentName" class="form-control" placeholder="Enter full name" required />
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="studentDOB">Date of Birth <span class="required">*</span></label>
-                                    <input type="date" id="studentDOB" class="form-control" required />
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label" for="studentGender">Gender <span class="required">*</span></label>
-                                    <select id="studentGender" class="form-control" required>
-                                        <option value="">Select Gender</option>
-                                        <option>Male</option>
-                                        <option>Female</option>
-                                        <option>Other</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="studentClass">Class <span class="required">*</span></label>
-                                    <select id="studentClass" class="form-control" required>
-                                        <option value="">Select Class</option>
-                                        <option>Nursery</option><option>LKG</option><option>UKG</option>
-                                        <option>Class 1</option><option>Class 2</option><option>Class 3</option>
-                                        <option>Class 4</option><option>Class 5</option><option>Class 6</option>
-                                        <option>Class 7</option><option>Class 8</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label" for="studentSection">Section</label>
-                                    <select id="studentSection" class="form-control">
-                                        <option value="">Select Section</option>
-                                        <option>A</option><option>B</option><option>C</option><option>NA</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="studentPhone">Phone <span class="required">*</span></label>
-                                    <input type="tel" id="studentPhone" class="form-control" placeholder="Enter phone number" required />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="studentEmail">Email</label>
-                                <input type="email" id="studentEmail" class="form-control" placeholder="Enter email address" />
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="studentAddress">Address <span class="required">*</span></label>
-                                <textarea id="studentAddress" class="form-control" rows="2" placeholder="Enter complete address" required></textarea>
-                            </div>
-                            <div class="step-actions">
-                                <button type="button" class="btn btn-primary step-next" data-next="2">Next</button>
-                            </div>
-                        </div>
-
-                        <!-- ===== STEP 2: PREVIOUS EDUCATION ===== -->
-                        <div class="form-step" data-step="2" style="display:none;">
-                            <h3 class="step-title">Previous Education</h3>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label" for="prevSchool">Previous School</label>
-                                    <input type="text" id="prevSchool" class="form-control" placeholder="Name of previous school" />
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="prevClass">Previous Class</label>
-                                    <select id="prevClass" class="form-control">
-                                        <option value="">Select</option>
-                                        <option>Nursery</option><option>LKG</option><option>UKG</option>
-                                        <option>Class 1</option><option>Class 2</option><option>Class 3</option>
-                                        <option>Class 4</option><option>Class 5</option><option>Class 6</option>
-                                        <option>Class 7</option><option>Class 8</option>
-                                        <option>Class 9</option><option>Class 10</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label" for="prevYear">Year of Passing</label>
-                                    <input type="number" id="prevYear" class="form-control" placeholder="e.g., 2025" min="2000" max="2030" />
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="prevGrade">Grade / Percentage</label>
-                                    <input type="text" id="prevGrade" class="form-control" placeholder="e.g., A+ or 85%" />
-                                </div>
-                            </div>
-                            <div class="step-actions">
-                                <button type="button" class="btn step-prev" data-prev="1">Previous</button>
-                                <button type="button" class="btn btn-primary step-next" data-next="3">Next</button>
-                            </div>
-                        </div>
-
-                        <!-- ===== STEP 3: CONFIRMATION & SUBMIT ===== -->
-                        <div class="form-step" data-step="3" style="display:none;">
-                            <h3 class="step-title">Confirmation &amp; Submit</h3>
-                            <div class="confirmation-summary">
-                                <div class="confirmation-grid">
-                                    <div class="confirmation-item">
-                                        <span class="confirmation-label">Student ID</span>
-                                        <span class="confirmation-value" id="confirmStudentId">—</span>
-                                    </div>
-                                    <div class="confirmation-item">
-                                        <span class="confirmation-label">Form Number</span>
-                                        <span class="confirmation-value" id="confirmFormNumber">—</span>
-                                    </div>
-                                    <div class="confirmation-item">
-                                        <span class="confirmation-label">Date</span>
-                                        <span class="confirmation-value" id="confirmDate">—</span>
-                                    </div>
-                                    <div class="confirmation-item">
-                                        <span class="confirmation-label">Name</span>
-                                        <span class="confirmation-value" id="confirmName">—</span>
-                                    </div>
-                                    <div class="confirmation-item">
-                                        <span class="confirmation-label">Class</span>
-                                        <span class="confirmation-value" id="confirmClass">—</span>
-                                    </div>
-                                    <div class="confirmation-item">
-                                        <span class="confirmation-label">Email</span>
-                                        <span class="confirmation-value" id="confirmEmail">—</span>
-                                    </div>
-                                    <div class="confirmation-item">
-                                        <span class="confirmation-label">Phone</span>
-                                        <span class="confirmation-value" id="confirmPhone">—</span>
-                                    </div>
-                                    <div class="confirmation-item">
-                                        <span class="confirmation-label">Address</span>
-                                        <span class="confirmation-value" id="confirmAddress">—</span>
-                                    </div>
-                                </div>
-                                <div class="confirmation-note">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-                                    <span>Please review all details before submitting.</span>
-                                </div>
-                            </div>
-                            <div class="step-actions">
-                                <button type="button" class="btn step-prev" data-prev="2">Previous</button>
-                                <button type="submit" class="btn btn-success" id="finalSubmitBtn">
-                                    <span class="btn-text">Submit Admission</span>
-                                    <span class="spinner" style="display:none;"></span>
-                                </button>
-                            </div>
-                        </div>
-
-                    </form>
+            <!-- Filters -->
+            <div class="student-filters">
+                <div class="filter-group">
+                    <select class="form-control form-control-sm" id="filterClass">
+                        <option value="">All Classes</option>
+                        <!-- Updated to match Admission classes -->
+                        <option>Nursery</option>
+                        <option>LKG</option>
+                        <option>UKG</option>
+                        <option>Class 1</option>
+                        <option>Class 2</option>
+                        <option>Class 3</option>
+                        <option>Class 4</option>
+                        <option>Class 5</option>
+                        <option>Class 6</option>
+                        <option>Class 7</option>
+                        <option>Class 8</option>
+                    </select>
+                    <select class="form-control form-control-sm" id="filterSection">
+                        <option value="">All Sections</option>
+                        <option>A</option>
+                        <option>B</option>
+                        <option>C</option>
+                        <option>NA</option>
+                    </select>
+                    <select class="form-control form-control-sm" id="filterStatus">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="graduated">Graduated</option>
+                    </select>
+                    <input type="text" class="form-control form-control-sm" id="searchInput" placeholder="Search by name or ID" />
+                    <button class="btn btn-primary btn-sm" id="applyFilterBtn">Filter</button>
+                    <button class="btn btn-sm" id="resetFilterBtn">Reset</button>
                 </div>
             </div>
 
-            <!-- ============================================================ -->
-            <!-- ADMISSIONS LIST                                               -->
-            <!-- ============================================================ -->
-            <div id="admissionListContainer">
-                <div class="admission-filters">
-                    <div class="filter-group">
-                        <select class="form-control form-control-sm" id="filterClass">
-                            <option value="">All Classes</option>
-                            <option>Nursery</option><option>LKG</option><option>UKG</option>
-                            <option>Class 1</option><option>Class 2</option><option>Class 3</option>
-                            <option>Class 4</option><option>Class 5</option><option>Class 6</option>
-                            <option>Class 7</option><option>Class 8</option>
-                        </select>
-                        <select class="form-control form-control-sm" id="filterStatus">
-                            <option value="">All Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="approved">Approved</option>
-                            <option value="rejected">Rejected</option>
-                        </select>
-                        <input type="text" class="form-control form-control-sm" id="searchInput" placeholder="Search by name or ID" />
-                        <button class="btn btn-primary btn-sm" id="applyFilterBtn">Apply</button>
-                        <button class="btn btn-sm" id="resetFilterBtn">Reset</button>
-                    </div>
+            <!-- Students Table -->
+            <div class="card">
+                <div class="card-body p-0">
+                    <table class="table student-table" id="studentTable">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll" /></th>
+                                <th>Student</th>
+                                <th>Class</th>
+                                <th>Roll No</th>
+                                <th>Parent Contact</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody">
+                            <tr>
+                                <td colspan="7" class="text-center">Loading students...</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-
-                <div class="card">
-                    <div class="card-body p-0">
-                        <table class="table admission-table" id="admissionTable">
-                            <thead>
-                                <tr>
-                                    <th>Student ID</th>
-                                    <th>Student Name</th>
-                                    <th>Class</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admissionTableBody">
-                                <tr><td colspan="6" class="text-center">Loading admissions...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer d-flex align-center justify-between">
-                        <span class="text-muted" id="admissionCount">Showing 0 entries</span>
-                        <div class="pagination">
-                            <button class="btn btn-sm" id="prevPage">Prev</button>
-                            <button class="btn btn-sm btn-primary" id="page1">1</button>
-                            <button class="btn btn-sm" id="nextPage">Next</button>
-                        </div>
+                <!-- Pagination -->
+                <div class="card-footer d-flex align-center justify-between">
+                    <span class="text-muted" id="studentCount">Showing 0 entries</span>
+                    <div class="pagination">
+                        <button class="btn btn-sm" id="prevPage">Prev</button>
+                        <button class="btn btn-sm btn-primary" id="page1">1</button>
+                        <button class="btn btn-sm" id="nextPage">Next</button>
                     </div>
                 </div>
             </div>
-
         </main>
 
         <!-- Footer -->
@@ -292,18 +129,92 @@
         </footer>
     </div>
 
+    <!-- ===== STUDENT MODAL (Add/Edit) ===== -->
+    <div class="modal-overlay" id="studentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="studentModalTitle">Add Student</h3>
+                <button class="modal-close" id="closeStudentModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="studentForm">
+                    <input type="hidden" id="editStudentId" />
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="studentName">Full Name <span class="required">*</span></label>
+                            <input type="text" id="studentName" class="form-control" placeholder="Enter full name" required />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="studentClass">Class <span class="required">*</span></label>
+                            <select id="studentClass" class="form-control" required>
+                                <option value="">Select Class</option>
+                                <!-- Updated to match Admission classes -->
+                                <option>Nursery</option>
+                                <option>LKG</option>
+                                <option>UKG</option>
+                                <option>Class 1</option>
+                                <option>Class 2</option>
+                                <option>Class 3</option>
+                                <option>Class 4</option>
+                                <option>Class 5</option>
+                                <option>Class 6</option>
+                                <option>Class 7</option>
+                                <option>Class 8</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="rollNo">Roll Number</label>
+                            <input type="text" id="rollNo" class="form-control" placeholder="e.g., 101" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="studentStatus">Status</label>
+                            <select id="studentStatus" class="form-control">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="graduated">Graduated</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="parentName">Parent / Guardian</label>
+                            <input type="text" id="parentName" class="form-control" placeholder="Enter parent name" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="parentPhone">Parent Phone</label>
+                            <input type="tel" id="parentPhone" class="form-control" placeholder="Enter phone number" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="studentAddress">Address</label>
+                        <textarea id="studentAddress" class="form-control" rows="2" placeholder="Enter address"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn" id="cancelStudentBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="submitStudentBtn">
+                            <span class="btn-text">Save Student</span>
+                            <span class="spinner" style="display:none;"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- ===== CONFIRMATION DIALOG ===== -->
     <div class="modal-overlay" id="confirmModal">
         <div class="modal" style="max-width:400px;">
             <div class="modal-header">
-                <h3 class="modal-title">Confirm Action</h3>
+                <h3 class="modal-title">Confirm Deletion</h3>
                 <button class="modal-close" id="closeConfirmModal">&times;</button>
             </div>
             <div class="modal-body">
-                <p id="confirmMessage">Are you sure you want to perform this action?</p>
+                <p>Are you sure you want to delete this student record? This action cannot be undone.</p>
                 <div class="form-actions">
                     <button class="btn" id="cancelConfirmBtn">Cancel</button>
-                    <button class="btn btn-danger" id="confirmDeleteBtn">Confirm</button>
+                    <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
                 </div>
             </div>
         </div>
@@ -312,8 +223,8 @@
     <!-- ===== GLOBAL SCRIPTS ===== -->
     <script src="../../assets/js/script.js"></script>
 
-    <!-- ===== ADMISSION MODULE EXTERNAL SCRIPT ===== -->
-    <script type="module" src="../../assets/js/admission.js"></script>
+    <!-- ===== STUDENTS MODULE EXTERNAL SCRIPT ===== -->
+    <script type="module" src="../../assets/js/students.js"></script>
 
 </body>
 </html>
