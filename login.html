@@ -5,8 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>School ERP | Login</title>
     <link rel="stylesheet" href="assets/css/style.css" />
+    <!-- Import Map for Firebase Modular SDK -->
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js",
+                "firebase/database": "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js"
+            }
+        }
+    </script>
     <style>
-        /* Quick inline override for login background */
+        /* quick login styles (same as before) */
         body {
             background: var(--gray-100);
             display: flex;
@@ -55,6 +65,21 @@
             color: var(--primary);
             font-weight: 500;
         }
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .btn-loading .spinner { display: inline-block; }
+        .btn-loading .btn-text { display: none; }
+        .btn-loading { pointer-events: none; opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -79,8 +104,9 @@
                     </label>
                     <a href="#" style="font-size:14px;">Forgot Password?</a>
                 </div>
-                <button type="submit" class="btn btn-primary w-100" style="justify-content:center; padding:10px;">
-                    Sign In
+                <button type="submit" class="btn btn-primary w-100" id="loginBtn" style="justify-content:center; padding:10px;">
+                    <span class="btn-text">Sign In</span>
+                    <span class="spinner" style="display:none;"></span>
                 </button>
             </form>
             <div class="login-footer">
@@ -88,13 +114,85 @@
             </div>
         </div>
     </div>
-    <script src="assets/js/script.js"></script>
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Phase 2: Firebase Auth here. Phase 1: just redirect.
-            window.location.href = 'dashboard.html';
+
+    <!-- Firebase & Login Script -->
+    <script type="module">
+        import { auth, signInWithEmailAndPassword, onAuthStateChanged } from './assets/js/firebase.js';
+
+        const form = document.getElementById('loginForm');
+        const emailInput = document.getElementById('loginEmail');
+        const passwordInput = document.getElementById('loginPassword');
+        const loginBtn = document.getElementById('loginBtn');
+
+        // Check if already logged in
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Already logged in, redirect to dashboard
+                window.location.href = 'dashboard.html';
+            }
         });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!email || !password) {
+                showToast('Please fill in all fields.', 'warning');
+                return;
+            }
+
+            // Show loading state
+            loginBtn.classList.add('btn-loading');
+            loginBtn.querySelector('.spinner').style.display = 'inline-block';
+            loginBtn.querySelector('.btn-text').textContent = 'Signing in...';
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                // Success - redirect will be handled by onAuthStateChanged
+                showToast('Login successful!', 'success');
+                // Redirect after a short delay to allow toast
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 500);
+            } catch (error) {
+                // Reset loading state
+                loginBtn.classList.remove('btn-loading');
+                loginBtn.querySelector('.spinner').style.display = 'none';
+                loginBtn.querySelector('.btn-text').textContent = 'Sign In';
+
+                // Handle Firebase errors
+                let message = 'Login failed. Please try again.';
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        message = 'No user found with this email.';
+                        break;
+                    case 'auth/wrong-password':
+                        message = 'Incorrect password.';
+                        break;
+                    case 'auth/invalid-email':
+                        message = 'Invalid email format.';
+                        break;
+                    case 'auth/too-many-requests':
+                        message = 'Too many attempts. Please try later.';
+                        break;
+                    default:
+                        message = error.message;
+                }
+                showToast(message, 'error');
+            }
+        });
+
+        // Toast function from global script (should be available)
+        // If not, define it here (but we rely on script.js)
+        // The global script.js already defines showToast, so we assume it's loaded.
+        // However, we need to ensure script.js is loaded as well.
+        // In our case, we'll load script.js as a regular script (not module) before this module.
+        // We'll add a script tag for script.js in the head (or before this script).
+        // Since we have a regular script tag in the head for script.js, it's fine.
+        // We'll keep the existing script tag for script.js (non-module) and add our module after.
     </script>
+    <!-- Load global script (non-module) -->
+    <script src="assets/js/script.js"></script>
 </body>
 </html>
