@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Management ERP - Dashboard</title>
+    <title>Dashboard - EduERP</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Sidebar -->
+    <!-- Off‑canvas Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
             <div class="sidebar-logo">
@@ -26,38 +26,38 @@
             </div>
         </div>
         <nav class="sidebar-nav">
-            <a href="index.html" class="nav-item active" data-page="dashboard">
+            <a href="index.html" class="nav-item active">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
                     <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
                 </svg>
                 <span>Dashboard</span>
             </a>
-            <a href="pages/student-management.html" class="nav-item" data-page="students">
+            <a href="pages/student-management.html" class="nav-item">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
                     <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                 </svg>
                 <span>Students</span>
             </a>
-            <a href="pages/teacher-management.html" class="nav-item" data-page="teachers">
+            <a href="pages/teacher-management.html" class="nav-item">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
                 </svg>
                 <span>Teachers</span>
             </a>
-            <a href="pages/fee-management.html" class="nav-item" data-page="fees">
+            <a href="pages/fee-management.html" class="nav-item">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                 </svg>
                 <span>Fee Management</span>
             </a>
-            <a href="pages/salary-management.html" class="nav-item" data-page="salary">
+            <a href="pages/salary-management.html" class="nav-item">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
                     <circle cx="12" cy="14" r="2"/>
                 </svg>
-                <span>Salary Management</span>
+                <span>Salary</span>
             </a>
         </nav>
         <div class="sidebar-footer">
@@ -65,18 +65,17 @@
         </div>
     </aside>
 
-    <!-- Mobile Header -->
+    <!-- Mobile header with hamburger -->
     <header class="mobile-header" id="mobileHeader">
-        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+        <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/>
-                <line x1="3" y1="18" x2="21" y2="18"/>
+                <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
             </svg>
         </button>
         <span class="mobile-brand">EduERP</span>
     </header>
 
-    <!-- Overlay for mobile -->
+    <!-- Overlay for mobile sidebar -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- Main Content -->
@@ -89,7 +88,7 @@
             <div class="header-date" id="headerDate"></div>
         </div>
 
-        <!-- Stats Cards -->
+        <!-- Statistics Cards -->
         <section class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon stat-icon-blue">
@@ -121,7 +120,7 @@
                     </svg>
                 </div>
                 <div class="stat-info">
-                    <span class="stat-label">Fee Collected (This Month)</span>
+                    <span class="stat-label">Fee Collected (Month)</span>
                     <span class="stat-value" id="feeCollected">₹0</span>
                 </div>
             </div>
@@ -133,7 +132,7 @@
                     </svg>
                 </div>
                 <div class="stat-info">
-                    <span class="stat-label">Salary Paid (This Month)</span>
+                    <span class="stat-label">Salary Paid (Month)</span>
                     <span class="stat-value" id="salaryPaid">₹0</span>
                 </div>
             </div>
@@ -164,27 +163,27 @@
                     <h3>Quick Actions</h3>
                 </div>
                 <div class="card-body quick-actions">
-                    <a href="pages/student-management.html#add-student" class="action-btn action-btn-blue">
+                    <a href="pages/student-management.html" class="action-btn action-btn-blue">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
                             <line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/>
                         </svg>
                         Add Student
                     </a>
-                    <a href="pages/teacher-management.html#add-teacher" class="action-btn action-btn-green">
+                    <a href="pages/teacher-management.html" class="action-btn action-btn-green">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
                             <line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/>
                         </svg>
                         Add Teacher
                     </a>
-                    <a href="pages/fee-management.html#collect-fee" class="action-btn action-btn-purple">
+                    <a href="pages/fee-management.html" class="action-btn action-btn-purple">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                         </svg>
                         Collect Fee
                     </a>
-                    <a href="pages/salary-management.html#pay-salary" class="action-btn action-btn-orange">
+                    <a href="pages/salary-management.html" class="action-btn action-btn-orange">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
                         </svg>
@@ -198,7 +197,7 @@
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- Confirmation Modal -->
+    <!-- Global Confirm Modal -->
     <div class="modal-overlay" id="confirmModal">
         <div class="modal-dialog modal-sm">
             <div class="modal-header">
